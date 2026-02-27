@@ -125,9 +125,11 @@ export default function Home() {
             </h1>
           </div>
           <nav className="hidden md:flex gap-8">
-            <a href="#services" className="text-foreground hover:text-primary transition-colors">
-              Services
-            </a>
+            <Link href="/services">
+              <a className="text-foreground hover:text-primary transition-colors">
+                Services
+              </a>
+            </Link>
             <a href="#gallery" className="text-foreground hover:text-primary transition-colors">
               Gallery
             </a>
