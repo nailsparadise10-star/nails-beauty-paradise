@@ -229,7 +229,7 @@ export default function Home() {
           <h2 className="text-4xl font-bold text-center mb-4 elegant-text text-foreground">
             Our Services
           </h2>
-          <div className="w-24 h-1 rose-gold-line mx-auto mb-16"></div>
+          <div className="w-24 h-1 lime-green-line mx-auto mb-16"></div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service) => (
@@ -271,7 +271,7 @@ export default function Home() {
           <h2 className="text-4xl font-bold text-center mb-4 elegant-text text-foreground">
             Our Work
           </h2>
-          <div className="w-24 h-1 rose-gold-line mx-auto mb-16"></div>
+          <div className="w-24 h-1 lime-green-line mx-auto mb-16"></div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
@@ -299,7 +299,7 @@ export default function Home() {
           <h2 className="text-4xl font-bold text-center mb-4 elegant-text text-foreground">
             Latest from Our Blog
           </h2>
-          <div className="w-24 h-1 rose-gold-line mx-auto mb-16"></div>
+          <div className="w-24 h-1 lime-green-line mx-auto mb-16"></div>
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             {blogPosts.map((post) => (
@@ -351,7 +351,7 @@ export default function Home() {
           <h2 className="text-4xl font-bold text-center mb-4 elegant-text text-foreground">
             Book Your Appointment
           </h2>
-          <div className="w-24 h-1 rose-gold-line mx-auto mb-12"></div>
+          <div className="w-24 h-1 lime-green-line mx-auto mb-12"></div>
 
           <Card className="p-8 bg-white border-border">
             <form onSubmit={handleBookingSubmit} className="space-y-6">
@@ -468,7 +468,7 @@ export default function Home() {
           <h2 className="text-4xl font-bold text-center mb-4 elegant-text text-foreground">
             Get In Touch
           </h2>
-          <div className="w-24 h-1 rose-gold-line mx-auto mb-16"></div>
+          <div className="w-24 h-1 lime-green-line mx-auto mb-16"></div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-3xl mx-auto">
             {[

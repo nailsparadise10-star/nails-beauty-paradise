@@ -396,9 +396,7 @@ export default function Blog() {
           <p className="text-xl text-center text-foreground/70 max-w-2xl mx-auto mb-8">
             Discover expert tips, trends, and insights to keep your nails and beauty routine
             looking absolutely stunning.
-          </p>
-          <div className="w-24 h-1 rose-gold-line mx-auto"></div>
-        </div>
+          </p>          <div className="w-24 h-1 lime-green-line mx-auto mb-16"></div>    </div>
       </section>
 
       {/* Search and Filter Section */}

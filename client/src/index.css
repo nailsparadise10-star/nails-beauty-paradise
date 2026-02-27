@@ -43,81 +43,81 @@
 }
 
 :root {
-  /* Luxury Minimalism - Rose Gold & Cream Theme */
-  /* Primary: Rose Gold (#D4A5A5) - Elegant, warm, sophisticated */
-  /* Secondary: Warm Cream (#F5F1ED) - Inviting, luxurious background */
-  /* Accent: Soft Taupe (#C9B8B0) - Subtle, refined accents */
+  /* Vibrant Modern - Lime Green & Teal Theme */
+  /* Primary: Lime Green (#C4E538) - Energetic, modern, eye-catching */
+  /* Secondary: Teal (#1FBFB8) - Cool, sophisticated accent */
+  /* Background: White (#FFFFFF) - Clean, bright */
   
-  --primary: #D4A5A5;
-  --primary-foreground: #FFFFFF;
-  --sidebar-primary: #C9956E;
+  --primary: #C4E538;
+  --primary-foreground: #1A1A1A;
+  --sidebar-primary: #B8D92F;
   --sidebar-primary-foreground: #FFFFFF;
-  --chart-1: #D4A5A5;
-  --chart-2: #C9B8B0;
-  --chart-3: #B8A89F;
-  --chart-4: #A89890;
-  --chart-5: #988880;
+  --chart-1: #C4E538;
+  --chart-2: #1FBFB8;
+  --chart-3: #00A89D;
+  --chart-4: #009B8A;
+  --chart-5: #008877;
   --radius: 0.65rem;
   
-  /* Light theme - Warm, inviting palette */
-  --background: #FDFBF9;
-  --foreground: #3D3D3D;
-  --card: #FFFFFF;
-  --card-foreground: #3D3D3D;
+  /* Light theme - Bright, vibrant palette */
+  --background: #FFFFFF;
+  --foreground: #1A1A1A;
+  --card: #F8F9FA;
+  --card-foreground: #1A1A1A;
   --popover: #FFFFFF;
-  --popover-foreground: #3D3D3D;
-  --secondary: #F5F1ED;
-  --secondary-foreground: #5D5D5D;
-  --muted: #E8E3DE;
-  --muted-foreground: #7D7D7D;
-  --accent: #D4A5A5;
+  --popover-foreground: #1A1A1A;
+  --secondary: #E8F5F3;
+  --secondary-foreground: #1A1A1A;
+  --muted: #E0E0E0;
+  --muted-foreground: #666666;
+  --accent: #1FBFB8;
   --accent-foreground: #FFFFFF;
   --destructive: #DC2626;
   --destructive-foreground: #FFFFFF;
-  --border: #E8E3DE;
+  --border: #E0E0E0;
   --input: #FFFFFF;
-  --ring: #D4A5A5;
+  --ring: #C4E538;
   --sidebar: #FFFFFF;
-  --sidebar-foreground: #3D3D3D;
-  --sidebar-accent: #F5F1ED;
-  --sidebar-accent-foreground: #3D3D3D;
-  --sidebar-border: #E8E3DE;
-  --sidebar-ring: #D4A5A5;
+  --sidebar-foreground: #1A1A1A;
+  --sidebar-accent: #E8F5F3;
+  --sidebar-accent-foreground: #1A1A1A;
+  --sidebar-border: #E0E0E0;
+  --sidebar-ring: #C4E538;
 }
 
 .dark {
-  --primary: #D4A5A5;
-  --primary-foreground: #FFFFFF;
-  --sidebar-primary: #C9956E;
+  --primary: #C4E538;
+  --primary-foreground: #1A1A1A;
+  --sidebar-primary: #B8D92F;
   --sidebar-primary-foreground: #FFFFFF;
-  --background: #2A2420;
-  --foreground: #F5F1ED;
-  --card: #3D3530;
-  --card-foreground: #F5F1ED;
-  --popover: #3D3530;
-  --popover-foreground: #F5F1ED;
-  --secondary: #4A4540;
-  --secondary-foreground: #E8E3DE;
-  --muted: #5A5550;
-  --muted-foreground: #D8D3CE;
-  --accent: #D4A5A5;
-  --accent-foreground: #2A2420;
+  --background: #0F1419;
+  --foreground: #F5F5F5;
+  --card: #1A1F2E;
+  --card-foreground: #F5F5F5;
+  --popover: #1A1F2E;
+  --popover-foreground: #F5F5F5;
+  --secondary: #1A2E2B;
+  --secondary-foreground: #E0E0E0;
+  --muted: #2A3540;
+  --muted-foreground: #B0B0B0;
+  --accent: #1FBFB8;
+  --accent-foreground: #1A1A1A;
   --destructive: #F87171;
   --destructive-foreground: #FFFFFF;
-  --border: #5A5550;
-  --input: #4A4540;
-  --ring: #D4A5A5;
-  --chart-1: #D4A5A5;
-  --chart-2: #C9B8B0;
-  --chart-3: #B8A89F;
-  --chart-4: #A89890;
-  --chart-5: #988880;
-  --sidebar: #3D3530;
-  --sidebar-foreground: #F5F1ED;
-  --sidebar-accent: #4A4540;
-  --sidebar-accent-foreground: #F5F1ED;
-  --sidebar-border: #5A5550;
-  --sidebar-ring: #D4A5A5;
+  --border: #2A3540;
+  --input: #1A1F2E;
+  --ring: #C4E538;
+  --chart-1: #C4E538;
+  --chart-2: #1FBFB8;
+  --chart-3: #00A89D;
+  --chart-4: #009B8A;
+  --chart-5: #008877;
+  --sidebar: #1A1F2E;
+  --sidebar-foreground: #F5F5F5;
+  --sidebar-accent: #1A2E2B;
+  --sidebar-accent-foreground: #F5F5F5;
+  --sidebar-border: #2A3540;
+  --sidebar-ring: #C4E538;
 }
 
 @layer base {
@@ -173,27 +173,35 @@
     min-width: 0;
   }
 
-  /* Luxury Minimalism specific styles */
-  .rose-gold-line {
-    background: linear-gradient(90deg, transparent, #D4A5A5, transparent);
-    height: 1px;
+  /* Vibrant Modern specific styles */
+  .lime-green-line {
+    background: linear-gradient(90deg, transparent, #C4E538, transparent);
+    height: 2px;
   }
 
-  .rose-gold-accent {
-    border-color: #D4A5A5;
+  .teal-accent {
+    border-color: #1FBFB8;
   }
 
-  .luxury-shadow {
-    box-shadow: 0 4px 20px rgba(212, 165, 165, 0.15);
+  .vibrant-shadow {
+    box-shadow: 0 4px 20px rgba(196, 229, 56, 0.15);
   }
 
-  .luxury-shadow-lg {
-    box-shadow: 0 12px 40px rgba(212, 165, 165, 0.2);
+  .vibrant-shadow-lg {
+    box-shadow: 0 12px 40px rgba(196, 229, 56, 0.2);
+  }
+
+  .vibrant-shadow-teal {
+    box-shadow: 0 4px 20px rgba(31, 191, 184, 0.15);
   }
 
   .elegant-text {
     font-family: 'Playfair Display', serif;
     letter-spacing: -0.5px;
+  }
+
+  .gradient-lime-teal {
+    background: linear-gradient(135deg, #C4E538 0%, #1FBFB8 100%);
   }
 
   @media (min-width: 640px) {

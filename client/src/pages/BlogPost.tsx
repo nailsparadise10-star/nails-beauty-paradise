@@ -512,7 +512,7 @@ export default function BlogPost() {
             <h2 className="text-4xl font-bold text-center mb-4 elegant-text text-foreground">
               Related Articles
             </h2>
-            <div className="w-24 h-1 rose-gold-line mx-auto mb-12"></div>
+            <div className="w-24 h-1 lime-green-line mx-auto mb-12"></div>
 
             <div className="grid md:grid-cols-3 gap-8">
               {relatedPosts.map((relatedPost) => (
