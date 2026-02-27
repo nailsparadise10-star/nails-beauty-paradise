@@ -818,13 +818,12 @@ export default function NailDesigner() {
           <p className="text-lg text-foreground/70 mb-6 max-w-2xl mx-auto">
             Book an appointment with our expert nail technicians to bring your design to life!
           </p>
-          <Link href="/services">
-            <a>
-              <Button className="bg-primary hover:bg-primary/90 text-foreground font-semibold px-8 py-6 text-lg">
-                Book an Appointment
-              </Button>
-            </a>
-          </Link>
+          <Button 
+            onClick={() => window.location.href = '/services'}
+            className="bg-primary hover:bg-primary/90 text-foreground font-semibold px-8 py-6 text-lg"
+          >
+            Book an Appointment
+          </Button>
         </div>
       </section>
 
