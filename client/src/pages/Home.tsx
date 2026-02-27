@@ -125,29 +125,33 @@ export default function Home() {
             </h1>
           </div>
           <nav className="hidden md:flex gap-8">
-            <Link href="/services">
-              <a className="text-foreground hover:text-primary transition-colors">
-                Services
-              </a>
-            </Link>
-            <Link href="/nail-designer">
-              <a className="text-foreground hover:text-primary transition-colors">
-                Designer
-              </a>
-            </Link>
+            <button 
+              onClick={() => window.location.href = '/services'}
+              className="text-foreground hover:text-primary transition-colors cursor-pointer bg-none border-none p-0"
+            >
+              Services
+            </button>
+            <button 
+              onClick={() => window.location.href = '/nail-designer'}
+              className="text-foreground hover:text-primary transition-colors cursor-pointer bg-none border-none p-0"
+            >
+              Designer
+            </button>
             <a href="#gallery" className="text-foreground hover:text-primary transition-colors">
               Gallery
             </a>
-            <Link href="/booking">
-              <a className="text-foreground hover:text-primary transition-colors">
-                Booking
-              </a>
-            </Link>
-            <Link href="/blog">
-              <a className="text-foreground hover:text-primary transition-colors">
-                Blog
-              </a>
-            </Link>
+            <button 
+              onClick={() => window.location.href = '/booking'}
+              className="text-foreground hover:text-primary transition-colors cursor-pointer bg-none border-none p-0"
+            >
+              Booking
+            </button>
+            <button 
+              onClick={() => window.location.href = '/blog'}
+              className="text-foreground hover:text-primary transition-colors cursor-pointer bg-none border-none p-0"
+            >
+              Blog
+            </button>
             <a href="#contact" className="text-foreground hover:text-primary transition-colors">
               Contact
             </a>
@@ -388,13 +392,12 @@ export default function Home() {
                   <span>Download and share your designs</span>
                 </li>
               </ul>
-              <Link href="/nail-designer">
-                <a>
-                  <Button className="bg-primary hover:bg-primary/90 text-foreground font-semibold px-8 py-6">
-                    Start Designing Now
-                  </Button>
-                </a>
-              </Link>
+              <Button 
+                onClick={() => window.location.href = '/nail-designer'}
+                className="bg-primary hover:bg-primary/90 text-foreground font-semibold px-8 py-6"
+              >
+                Start Designing Now
+              </Button>
             </div>
             <div className="bg-white rounded-lg p-8 border border-border">
               <div className="aspect-square bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg flex items-center justify-center">
