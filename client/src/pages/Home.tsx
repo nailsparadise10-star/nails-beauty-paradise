@@ -2,8 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Sparkles, Heart, Users, Brush, Mail, Phone, MapPin } from "lucide-react";
+import { Sparkles, Heart, Users, Brush, Mail, Phone, MapPin, ArrowRight } from "lucide-react";
 import { useState } from "react";
+import { Link } from "wouter";
 
 /**
  * NAILS & BEAUTY PARADISE - Home Page
@@ -88,6 +89,30 @@ export default function Home() {
     },
   ];
 
+  const blogPosts = [
+    {
+      id: 1,
+      title: "The Ultimate Guide to Nail Health: 10 Essential Tips",
+      excerpt: "Learn how to keep your nails strong, healthy, and beautiful with these expert-approved tips from our professional nail technicians.",
+      category: "Nail Care",
+      image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663388595337/XQ5oNXoz9gDgsidXKiHTe5/hero-nails-manicure-Deb2tvFehdgUPe2RhGhPKy.webp",
+    },
+    {
+      id: 2,
+      title: "Spring 2026 Nail Trends: What's Hot This Season",
+      excerpt: "Discover the hottest nail trends for spring 2026, from pastel ombre to minimalist designs. Get inspired and stay ahead of the curve!",
+      category: "Trends",
+      image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663388595337/XQ5oNXoz9gDgsidXKiHTe5/hero-nails-manicure-Deb2tvFehdgUPe2RhGhPKy.webp",
+    },
+    {
+      id: 3,
+      title: "Eyelash Extensions 101: Everything You Need to Know",
+      excerpt: "Thinking about getting eyelash extensions? Learn everything about the process, aftercare, and how to maintain your beautiful lashes.",
+      category: "Beauty Tips",
+      image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663388595337/XQ5oNXoz9gDgsidXKiHTe5/eyelash-extensions-3xPLDDJQAbEFTSjKaM2AsC.webp",
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header/Navigation */}
@@ -109,6 +134,11 @@ export default function Home() {
             <a href="#booking" className="text-foreground hover:text-primary transition-colors">
               Booking
             </a>
+            <Link href="/blog">
+              <a className="text-foreground hover:text-primary transition-colors">
+                Blog
+              </a>
+            </Link>
             <a href="#contact" className="text-foreground hover:text-primary transition-colors">
               Contact
             </a>
@@ -259,6 +289,58 @@ export default function Home() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Blog Section */}
+      <section className="py-20 bg-secondary/50">
+        <div className="container">
+          <h2 className="text-4xl font-bold text-center mb-4 elegant-text text-foreground">
+            Latest from Our Blog
+          </h2>
+          <div className="w-24 h-1 rose-gold-line mx-auto mb-16"></div>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            {blogPosts.map((post) => (
+              <Link key={post.id} href={`/blog/${post.id}`}>
+                <a className="group">
+                  <Card className="h-full overflow-hidden hover:luxury-shadow transition-all duration-300 bg-white border-border cursor-pointer">
+                    <div className="relative h-40 overflow-hidden">
+                      <img
+                        src={post.image}
+                        alt={post.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute top-3 right-3 bg-primary text-white px-3 py-1 rounded-full text-xs font-semibold">
+                        {post.category}
+                      </div>
+                    </div>
+                    <div className="p-6">
+                      <h3 className="text-lg font-semibold mb-2 elegant-text text-foreground line-clamp-2 group-hover:text-primary transition-colors">
+                        {post.title}
+                      </h3>
+                      <p className="text-foreground/70 text-sm mb-4 line-clamp-2">
+                        {post.excerpt}
+                      </p>
+                      <div className="flex items-center text-primary text-sm font-semibold group-hover:translate-x-1 transition-transform">
+                        Read More <ArrowRight className="w-4 h-4 ml-2" />
+                      </div>
+                    </div>
+                  </Card>
+                </a>
+              </Link>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <Link href="/blog">
+              <a>
+                <Button className="bg-primary hover:bg-primary/90 text-white rounded-lg transition-all">
+                  View All Articles
+                </Button>
+              </a>
+            </Link>
           </div>
         </div>
       </section>
