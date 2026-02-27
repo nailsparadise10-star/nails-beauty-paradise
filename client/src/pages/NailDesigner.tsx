@@ -65,6 +65,150 @@ const ACCENTS = [
   { id: "geometric", name: "Geometric" },
 ];
 
+// AI-Generated Nail Design Templates
+const AI_TEMPLATES = [
+  {
+    id: 1,
+    name: "Tropical Paradise",
+    description: "Vibrant tropical design with lime green base and teal accents",
+    design: {
+      baseColor: "#C4E538",
+      pattern: "gradient",
+      glitter: true,
+      glitterColor: "#FFD700",
+      accent: "french",
+      accentColor: "#1FBFB8",
+      shine: 75,
+    },
+  },
+  {
+    id: 2,
+    name: "Midnight Elegance",
+    description: "Sophisticated black design with silver glitter and accent line",
+    design: {
+      baseColor: "#1A1A1A",
+      pattern: "solid",
+      glitter: true,
+      glitterColor: "#C0C0C0",
+      accent: "line",
+      accentColor: "#FFD700",
+      shine: 60,
+    },
+  },
+  {
+    id: 3,
+    name: "Coral Sunset",
+    description: "Warm coral with gradient effect and geometric accents",
+    design: {
+      baseColor: "#FF7F50",
+      pattern: "gradient",
+      glitter: false,
+      glitterColor: "#FFD700",
+      accent: "geometric",
+      accentColor: "#FF8C00",
+      shine: 70,
+    },
+  },
+  {
+    id: 4,
+    name: "Marble Dream",
+    description: "Elegant marble pattern with rose gold and white",
+    design: {
+      baseColor: "#FFFFFF",
+      pattern: "marble",
+      glitter: false,
+      glitterColor: "#FFD700",
+      accent: "half",
+      accentColor: "#D4A5A5",
+      shine: 65,
+    },
+  },
+  {
+    id: 5,
+    name: "Purple Royalty",
+    description: "Royal purple with polka dots and glitter shine",
+    design: {
+      baseColor: "#9370DB",
+      pattern: "dots",
+      glitter: true,
+      glitterColor: "#FFD700",
+      accent: "french",
+      accentColor: "#1A1A1A",
+      shine: 80,
+    },
+  },
+  {
+    id: 6,
+    name: "Mint Breeze",
+    description: "Fresh mint green with striped pattern and teal accents",
+    design: {
+      baseColor: "#98FF98",
+      pattern: "stripes",
+      glitter: false,
+      glitterColor: "#FFD700",
+      accent: "line",
+      accentColor: "#1FBFB8",
+      shine: 55,
+    },
+  },
+  {
+    id: 7,
+    name: "Gold Glamour",
+    description: "Luxurious gold base with geometric design and shine",
+    design: {
+      baseColor: "#FFD700",
+      pattern: "solid",
+      glitter: true,
+      glitterColor: "#FFA500",
+      accent: "geometric",
+      accentColor: "#FF8C00",
+      shine: 85,
+    },
+  },
+  {
+    id: 8,
+    name: "Ocean Waves",
+    description: "Teal gradient with white accent tips and glitter effect",
+    design: {
+      baseColor: "#1FBFB8",
+      pattern: "gradient",
+      glitter: true,
+      glitterColor: "#C0C0C0",
+      accent: "french",
+      accentColor: "#FFFFFF",
+      shine: 70,
+    },
+  },
+  {
+    id: 9,
+    name: "Rose Blush",
+    description: "Soft pink with marble effect and rose gold accents",
+    design: {
+      baseColor: "#FFB6C1",
+      pattern: "marble",
+      glitter: true,
+      glitterColor: "#D4A5A5",
+      accent: "half",
+      accentColor: "#D4A5A5",
+      shine: 60,
+    },
+  },
+  {
+    id: 10,
+    name: "Neon Vibes",
+    description: "Vibrant lime green with polka dots and teal accents",
+    design: {
+      baseColor: "#C4E538",
+      pattern: "dots",
+      glitter: true,
+      glitterColor: "#1FBFB8",
+      accent: "line",
+      accentColor: "#1FBFB8",
+      shine: 75,
+    },
+  },
+];
+
 export default function NailDesigner() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [design, setDesign] = useState<NailDesign>({
@@ -77,6 +221,7 @@ export default function NailDesigner() {
     shine: 50,
   });
   const [copied, setCopied] = useState(false);
+  const [showTemplates, setShowTemplates] = useState(false);
 
   // Draw nail design on canvas
   useEffect(() => {
@@ -321,6 +466,12 @@ export default function NailDesigner() {
     const designString = JSON.stringify(design);
     navigator.clipboard.writeText(designString);
     toast.success("Design code copied!");
+  };
+
+  const handleLoadTemplate = (template: typeof AI_TEMPLATES[0]) => {
+    setDesign(template.design);
+    setShowTemplates(false);
+    toast.success(`Loaded template: ${template.name}`);
   };
 
   return (
@@ -587,6 +738,53 @@ export default function NailDesigner() {
                 <div className="text-sm text-muted-foreground mt-2">
                   Shine Level: {design.shine}%
                 </div>
+              </Card>
+
+              {/* AI Templates */}
+              <Card className="p-6 bg-white border-border">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-primary" />
+                    <h3 className="text-lg font-semibold elegant-text text-foreground">
+                      AI Design Templates
+                    </h3>
+                  </div>
+                  <Button
+                    onClick={() => setShowTemplates(!showTemplates)}
+                    variant="outline"
+                    className="border-primary text-primary hover:bg-primary/10 text-sm"
+                  >
+                    {showTemplates ? "Hide" : "Show"}
+                  </Button>
+                </div>
+                {showTemplates && (
+                  <div className="grid grid-cols-2 gap-3 max-h-96 overflow-y-auto">
+                    {AI_TEMPLATES.map((template) => (
+                      <button
+                        key={template.id}
+                        onClick={() => handleLoadTemplate(template)}
+                        className="p-3 rounded-lg border-2 border-border hover:border-primary hover:bg-primary/5 transition-all text-left"
+                      >
+                        <div className="text-sm font-semibold text-foreground mb-1">
+                          {template.name}
+                        </div>
+                        <div className="text-xs text-foreground/60 line-clamp-2">
+                          {template.description}
+                        </div>
+                        <div className="mt-2 flex gap-1">
+                          <div
+                            className="w-6 h-6 rounded border border-border"
+                            style={{ backgroundColor: template.design.baseColor }}
+                          />
+                          <div
+                            className="w-6 h-6 rounded border border-border"
+                            style={{ backgroundColor: template.design.accentColor }}
+                          />
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </Card>
 
               {/* Design Code */}
