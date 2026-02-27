@@ -479,27 +479,37 @@ export default function NailDesigner() {
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border">
         <div className="container flex items-center justify-between py-4">
-          <Link href="/">
-            <a className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-              <span className="text-2xl">✨</span>
-              <h1 className="text-2xl font-bold text-foreground elegant-text">
-                NAILS & BEAUTY PARADISE
-              </h1>
-            </a>
-          </Link>
+          <button 
+            onClick={() => window.location.href = '/'}
+            className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer bg-none border-none p-0"
+          >
+            <span className="text-2xl">✨</span>
+            <h1 className="text-2xl font-bold text-foreground elegant-text">
+              NAILS & BEAUTY PARADISE
+            </h1>
+          </button>
           <nav className="hidden md:flex gap-8">
-            <Link href="/">
-              <a className="text-foreground hover:text-primary transition-colors">Home</a>
-            </Link>
-            <Link href="/services">
-              <a className="text-foreground hover:text-primary transition-colors">Services</a>
-            </Link>
-            <a href="/" className="text-foreground hover:text-primary transition-colors">
+            <button 
+              onClick={() => window.location.href = '/'}
+              className="text-foreground hover:text-primary transition-colors cursor-pointer bg-none border-none p-0"
+            >
+              Home
+            </button>
+            <button 
+              onClick={() => window.location.href = '/services'}
+              className="text-foreground hover:text-primary transition-colors cursor-pointer bg-none border-none p-0"
+            >
+              Services
+            </button>
+            <span className="text-foreground hover:text-primary transition-colors">
               Designer
-            </a>
-            <Link href="/blog">
-              <a className="text-foreground hover:text-primary transition-colors">Blog</a>
-            </Link>
+            </span>
+            <button 
+              onClick={() => window.location.href = '/blog'}
+              className="text-foreground hover:text-primary transition-colors cursor-pointer bg-none border-none p-0"
+            >
+              Blog
+            </button>
           </nav>
         </div>
       </header>
