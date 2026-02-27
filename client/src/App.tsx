@@ -9,6 +9,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import Services from "./pages/Services";
 import NailDesigner from "./pages/NailDesigner";
+import Booking from "./pages/Booking";
 
 
 function Router() {
@@ -17,6 +18,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/services" component={Services} />
       <Route path="/nail-designer" component={NailDesigner} />
+      <Route path="/booking" component={Booking} />
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:id" component={BlogPost} />
       <Route path="/404" component={NotFound} />

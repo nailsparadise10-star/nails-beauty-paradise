@@ -138,9 +138,11 @@ export default function Home() {
             <a href="#gallery" className="text-foreground hover:text-primary transition-colors">
               Gallery
             </a>
-            <a href="#booking" className="text-foreground hover:text-primary transition-colors">
-              Booking
-            </a>
+            <Link href="/booking">
+              <a className="text-foreground hover:text-primary transition-colors">
+                Booking
+              </a>
+            </Link>
             <Link href="/blog">
               <a className="text-foreground hover:text-primary transition-colors">
                 Blog
