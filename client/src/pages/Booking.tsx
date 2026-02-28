@@ -211,7 +211,7 @@ export default function Booking() {
       <section className="py-12 bg-gradient-to-r from-primary/10 to-accent/10 border-b border-border">
         <div className="container">
           <h1 className="text-4xl font-bold mb-2 elegant-text text-foreground">Book Your Appointment</h1>
-          <div className="w-24 h-1 lime-green-line mb-4"></div>
+          <div className="w-24 h-1 teal-gold-line mb-4"></div>
           <p className="text-lg text-foreground/70">
             Reserve your spot with our expert nail technicians and beauty specialists
           </p>

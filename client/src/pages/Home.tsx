@@ -8,9 +8,9 @@ import { Link } from "wouter";
 
 /**
  * NAILS & BEAUTY PARADISE - Home Page
- * Design: Luxury Minimalism with Warm Elegance
- * Color Palette: Rose Gold (#D4A5A5), Cream (#F5F1ED), Warm Neutrals
- * Typography: Playfair Display (serif) for headings, Lato for body
+ * Design: Modern Luxury Minimalism
+ * Color Palette: Deep Teal (#1B5E6F), Warm Gold (#D4AF37), Off-white (#F5F5F0)
+ * Typography: Playfair Display (serif) for headings, Inter (sans-serif) for body
  */
 
 export default function Home() {
@@ -242,7 +242,7 @@ export default function Home() {
           <h2 className="text-4xl font-bold text-center mb-4 elegant-text text-foreground">
             Our Services
           </h2>
-          <div className="w-24 h-1 lime-green-line mx-auto mb-16"></div>
+          <div className="w-24 h-1 teal-gold-line mx-auto mb-16"></div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service) => (
@@ -284,7 +284,7 @@ export default function Home() {
           <h2 className="text-4xl font-bold text-center mb-4 elegant-text text-foreground">
             Our Work
           </h2>
-          <div className="w-24 h-1 lime-green-line mx-auto mb-16"></div>
+          <div className="w-24 h-1 teal-gold-line mx-auto mb-16"></div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
@@ -312,7 +312,7 @@ export default function Home() {
           <h2 className="text-4xl font-bold text-center mb-4 elegant-text text-foreground">
             Latest from Our Blog
           </h2>
-          <div className="w-24 h-1 lime-green-line mx-auto mb-16"></div>
+          <div className="w-24 h-1 teal-gold-line mx-auto mb-16"></div>
 
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             {blogPosts.map((post) => (
@@ -364,7 +364,7 @@ export default function Home() {
           <h2 className="text-4xl font-bold text-center mb-4 elegant-text text-foreground">
             Design Your Perfect Nails
           </h2>
-          <div className="w-24 h-1 lime-green-line mx-auto mb-12"></div>
+          <div className="w-24 h-1 teal-gold-line mx-auto mb-12"></div>
 
           <div className="grid md:grid-cols-2 gap-8 items-center mb-12">
             <div>
@@ -417,7 +417,7 @@ export default function Home() {
           <h2 className="text-4xl font-bold text-center mb-4 elegant-text text-foreground">
             Book Your Appointment
           </h2>
-          <div className="w-24 h-1 lime-green-line mx-auto mb-12"></div>
+          <div className="w-24 h-1 teal-gold-line mx-auto mb-12"></div>
 
           <Card className="p-8 bg-white border-border">
             <form onSubmit={handleBookingSubmit} className="space-y-6">
@@ -534,7 +534,7 @@ export default function Home() {
           <h2 className="text-4xl font-bold text-center mb-4 elegant-text text-foreground">
             Get In Touch
           </h2>
-          <div className="w-24 h-1 lime-green-line mx-auto mb-16"></div>
+          <div className="w-24 h-1 teal-gold-line mx-auto mb-16"></div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-3xl mx-auto">
             {[
