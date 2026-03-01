@@ -541,17 +541,17 @@ export default function Home() {
               {
                 icon: Phone,
                 title: "Phone",
-                info: "+1 (555) 123-4567",
+                info: "+61 434 188 999",
               },
               {
                 icon: Mail,
                 title: "Email",
-                info: "hello@nailsbeautyparadise.com",
+                info: "suport@nailsparadise.com",
               },
               {
                 icon: MapPin,
                 title: "Location",
-                info: "123 Beauty Street, Paradise City, PC 12345",
+                info: "47 Vulture Street, West End, QLD 4101, Australia",
               },
             ].map((contact, idx) => (
               <Card
@@ -607,9 +607,8 @@ export default function Home() {
             <div>
               <h4 className="font-semibold text-foreground mb-4 elegant-text">Hours</h4>
               <ul className="space-y-2 text-sm text-foreground/70">
-                <li>Mon - Fri: 10am - 7pm</li>
-                <li>Sat: 10am - 6pm</li>
-                <li>Sun: 12pm - 5pm</li>
+                <li>Mon-Sat: 8:30am - 9:30pm</li>
+                <li>Sun: 10:00am - 4:00pm</li>
               </ul>
             </div>
             <div>
