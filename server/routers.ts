@@ -5,6 +5,7 @@ import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
 import * as db from "./db";
 import { TRPCError } from "@trpc/server";
+import { sendBookingConfirmationEmail } from "./email";
 
 export const appRouter = router({
   system: systemRouter,
@@ -37,7 +38,33 @@ export const appRouter = router({
         time: z.string().optional(),
         notes: z.string().optional(),
       }))
-      .mutation(({ input }) => db.createBooking(input)),
+      .mutation(async ({ input }) => {
+        // Create booking in database
+        const result = await db.createBooking(input);
+        
+        // Generate booking ID
+        const bookingId = `BOOK-${Date.now()}`;
+        
+        // Send confirmation email
+        try {
+          await sendBookingConfirmationEmail({
+            customerName: input.name,
+            customerEmail: input.email,
+            serviceName: input.service,
+            date: input.date,
+            time: input.time || "To be confirmed",
+            bookingId,
+            phone: input.phone,
+            notes: input.notes,
+          });
+          console.log(`[Booking] Confirmation email sent to ${input.email}`);
+        } catch (error) {
+          console.error(`[Booking] Failed to send confirmation email:`, error);
+          // Don't throw error - booking is still created even if email fails
+        }
+        
+        return result;
+      }),
     
     update: protectedProcedure
       .input(z.object({
