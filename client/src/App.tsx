@@ -10,9 +10,10 @@ import BlogPost from "./pages/BlogPost";
 import Services from "./pages/Services";
 import NailDesigner from "./pages/NailDesigner";
 import Booking from "./pages/Booking";
-
+import AdminDashboard from "./pages/AdminDashboard";
 
 function Router() {
+  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
       <Route path="/" component={Home} />
@@ -21,6 +22,7 @@ function Router() {
       <Route path="/booking" component={Booking} />
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:id" component={BlogPost} />
+      <Route path="/admin" component={AdminDashboard} />
       <Route path="/404" component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
