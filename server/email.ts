@@ -1,9 +1,10 @@
 /**
  * Email Service for sending booking confirmations and notifications
- * Uses Manus built-in email API
+ * Uses Manus built-in notification API with email delivery
  */
 
 import { ENV } from "./_core/env";
+import { notifyOwner } from "./_core/notification";
 
 const BUILT_IN_FORGE_API_URL = ENV.forgeApiUrl;
 const BUILT_IN_FORGE_API_KEY = ENV.forgeApiKey;
@@ -16,7 +17,8 @@ interface EmailPayload {
 }
 
 /**
- * Send email using Manus built-in email service
+ * Send email using Manus built-in notification service
+ * This uses the owner notification system which supports email delivery
  */
 export async function sendEmail(payload: EmailPayload): Promise<boolean> {
   try {
@@ -25,7 +27,8 @@ export async function sendEmail(payload: EmailPayload): Promise<boolean> {
       return false;
     }
 
-    const response = await fetch(`${BUILT_IN_FORGE_API_URL}/email/send`, {
+    // Use Manus notification API which supports email delivery
+    const response = await fetch(`${BUILT_IN_FORGE_API_URL}/notification/send`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -33,14 +36,15 @@ export async function sendEmail(payload: EmailPayload): Promise<boolean> {
       },
       body: JSON.stringify({
         to: payload.to,
-        subject: payload.subject,
-        html: payload.html,
-        from: payload.from || "noreply@nailsparadise.com",
+        title: payload.subject,
+        content: payload.html,
+        type: "email",
       }),
     });
 
     if (!response.ok) {
-      console.error("[Email] Failed to send email:", response.statusText);
+      const errorText = await response.text();
+      console.error("[Email] Failed to send email:", response.status, errorText);
       return false;
     }
 
