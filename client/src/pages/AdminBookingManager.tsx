@@ -1,5 +1,5 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc";
 import { Trash2, Edit2, CheckCircle, Clock, Bell } from "lucide-react";
 import { useState } from "react";
@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { ScheduledEmailsManager } from "./ScheduledEmailsManager";
 
 export default function AdminBookingManager() {
   const bookingsQuery = trpc.bookings.list.useQuery();
@@ -17,6 +18,7 @@ export default function AdminBookingManager() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editStatus, setEditStatus] = useState<"pending" | "confirmed" | "completed" | "cancelled">("pending");
   const [editNotes, setEditNotes] = useState("");
+  const [expandedBookingId, setExpandedBookingId] = useState<number | null>(null);
 
   const handleUpdate = async (id: number) => {
     try {
@@ -83,80 +85,102 @@ export default function AdminBookingManager() {
             </thead>
             <tbody>
               {bookingsQuery.data?.map((booking) => (
-                <tr key={booking.id} className="border-b hover:bg-muted/50">
-                  <td className="py-3 px-4">{booking.name}</td>
-                  <td className="py-3 px-4">{booking.service}</td>
-                  <td className="py-3 px-4">{booking.date}</td>
-                  <td className={`py-3 px-4 font-semibold ${getStatusColor(booking.status)}`}>
-                    {booking.status}
-                  </td>
-                  <td className="py-3 px-4 space-x-2">
-                    <Dialog open={editingId === booking.id} onOpenChange={(open) => !open && setEditingId(null)}>
-                      <DialogTrigger asChild>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => {
-                            setEditingId(booking.id);
-                            setEditStatus(booking.status as any);
-                            setEditNotes(booking.notes || "");
-                          }}
-                        >
-                          <Edit2 className="w-4 h-4" />
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Edit Booking</DialogTitle>
-                        </DialogHeader>
-                        <div className="space-y-4">
-                          <div>
-                            <label className="text-sm font-medium">Status</label>
-                            <Select value={editStatus} onValueChange={(value: any) => setEditStatus(value)}>
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="pending">Pending</SelectItem>
-                                <SelectItem value="confirmed">Confirmed</SelectItem>
-                                <SelectItem value="completed">Completed</SelectItem>
-                                <SelectItem value="cancelled">Cancelled</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                          <div>
-                            <label className="text-sm font-medium">Notes</label>
-                            <Textarea
-                              value={editNotes}
-                              onChange={(e) => setEditNotes(e.target.value)}
-                              placeholder="Add notes..."
-                            />
-                          </div>
-                          <Button onClick={() => handleUpdate(booking.id)} className="w-full">
-                            Save Changes
+                <>
+                  <tr key={booking.id} className="border-b hover:bg-muted/50">
+                    <td className="py-3 px-4">{booking.name}</td>
+                    <td className="py-3 px-4">{booking.service}</td>
+                    <td className="py-3 px-4">{booking.date}</td>
+                    <td className={`py-3 px-4 font-semibold ${getStatusColor(booking.status)}`}>
+                      {booking.status}
+                    </td>
+                    <td className="py-3 px-4 space-x-2">
+                      <Dialog open={editingId === booking.id} onOpenChange={(open) => !open && setEditingId(null)}>
+                        <DialogTrigger asChild>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              setEditingId(booking.id);
+                              setEditStatus(booking.status as any);
+                              setEditNotes(booking.notes || "");
+                            }}
+                          >
+                            <Edit2 className="w-4 h-4" />
                           </Button>
-                        </div>
-                      </DialogContent>
-                    </Dialog>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Edit Booking</DialogTitle>
+                          </DialogHeader>
+                          <div className="space-y-4">
+                            <div>
+                              <label className="text-sm font-medium">Status</label>
+                              <Select value={editStatus} onValueChange={(value: any) => setEditStatus(value)}>
+                                <SelectTrigger>
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="pending">Pending</SelectItem>
+                                  <SelectItem value="confirmed">Confirmed</SelectItem>
+                                  <SelectItem value="completed">Completed</SelectItem>
+                                  <SelectItem value="cancelled">Cancelled</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div>
+                              <label className="text-sm font-medium">Notes</label>
+                              <Textarea
+                                value={editNotes}
+                                onChange={(e) => setEditNotes(e.target.value)}
+                                placeholder="Add notes..."
+                              />
+                            </div>
+                            <Button onClick={() => handleUpdate(booking.id)} className="w-full">
+                              Save Changes
+                            </Button>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
 
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => handleSendReminder(booking.id, booking.email)}
-                      title="Send reminder email"
-                    >
-                      <Bell className="w-4 h-4" />
-                    </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleSendReminder(booking.id, booking.email)}
+                        title="Send reminder email"
+                      >
+                        <Bell className="w-4 h-4" />
+                      </Button>
 
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() => handleDelete(booking.id)}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </td>
-                </tr>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setExpandedBookingId(expandedBookingId === booking.id ? null : booking.id)}
+                        title="Schedule email"
+                      >
+                        <Clock className="w-4 h-4" />
+                      </Button>
+
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        onClick={() => handleDelete(booking.id)}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </td>
+                  </tr>
+                  {expandedBookingId === booking.id && (
+                    <tr>
+                      <td colSpan={5} className="py-4 px-4 bg-muted/30">
+                        <ScheduledEmailsManager
+                          bookingId={booking.id}
+                          customerName={booking.name}
+                          customerEmail={booking.email}
+                        />
+                      </td>
+                    </tr>
+                  )}
+                </>
               ))}
             </tbody>
           </table>

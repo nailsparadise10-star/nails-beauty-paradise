@@ -1,6 +1,6 @@
 import { eq, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, bookings, blogPosts, Booking, InsertBooking, BlogPost, InsertBlogPost, emailHistory, EmailHistory, InsertEmailHistory } from "../drizzle/schema";
+import { InsertUser, users, bookings, blogPosts, Booking, InsertBooking, BlogPost, InsertBlogPost, emailHistory, EmailHistory, InsertEmailHistory, scheduledEmails, ScheduledEmail, InsertScheduledEmail } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -180,4 +180,37 @@ export async function updateEmailHistory(id: number, record: Partial<EmailHistor
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   return await db.update(emailHistory).set(record).where(eq(emailHistory.id, id));
+}
+
+// Scheduled emails queries
+export async function getScheduledEmailsByBookingId(bookingId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(scheduledEmails).where(eq(scheduledEmails.bookingId, bookingId)).orderBy(desc(scheduledEmails.scheduledAt));
+}
+
+export async function getPendingScheduledEmails() {
+  const db = await getDb();
+  if (!db) return [];
+  const now = new Date();
+  return await db.select().from(scheduledEmails).where(eq(scheduledEmails.status, "pending")).orderBy(scheduledEmails.scheduledAt);
+}
+
+export async function createScheduledEmail(email: InsertScheduledEmail) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.insert(scheduledEmails).values(email);
+  return result;
+}
+
+export async function updateScheduledEmail(id: number, email: Partial<ScheduledEmail>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return await db.update(scheduledEmails).set(email).where(eq(scheduledEmails.id, id));
+}
+
+export async function deleteScheduledEmail(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return await db.delete(scheduledEmails).where(eq(scheduledEmails.id, id));
 }

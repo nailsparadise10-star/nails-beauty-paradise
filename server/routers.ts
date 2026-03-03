@@ -175,6 +175,47 @@ export const appRouter = router({
       .input(z.object({ bookingId: z.number() }))
       .query(({ input }) => db.getEmailHistoryByBookingId(input.bookingId)),
   }),
+
+  scheduledEmails: router({
+    getByBookingId: protectedProcedure
+      .input(z.object({ bookingId: z.number() }))
+      .query(({ input }) => db.getScheduledEmailsByBookingId(input.bookingId)),
+    
+    schedule: protectedProcedure
+      .input(z.object({
+        bookingId: z.number(),
+        subject: z.string(),
+        message: z.string(),
+        scheduledAt: z.date(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
+        
+        const booking = await db.getBookingById(input.bookingId);
+        if (!booking) throw new TRPCError({ code: "NOT_FOUND", message: "Booking not found" });
+        
+        const result = await db.createScheduledEmail({
+          bookingId: input.bookingId,
+          customerEmail: booking.email,
+          customerName: booking.name,
+          subject: input.subject,
+          message: input.message,
+          scheduledAt: input.scheduledAt,
+          status: "pending",
+        });
+        
+        return { success: true, message: "Email scheduled successfully" };
+      }),
+    
+    cancel: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input, ctx }) => {
+        if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
+        
+        await db.updateScheduledEmail(input.id, { status: "cancelled" });
+        return { success: true, message: "Email scheduling cancelled" };
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;
