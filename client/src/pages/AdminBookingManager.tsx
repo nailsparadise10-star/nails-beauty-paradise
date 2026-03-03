@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
-import { Trash2, Edit2, CheckCircle, Clock } from "lucide-react";
+import { Trash2, Edit2, CheckCircle, Clock, Bell } from "lucide-react";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,7 @@ export default function AdminBookingManager() {
   const bookingsQuery = trpc.bookings.list.useQuery();
   const updateMutation = trpc.bookings.update.useMutation();
   const deleteMutation = trpc.bookings.delete.useMutation();
+  const sendReminderMutation = trpc.reminders.sendForBooking.useMutation();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editStatus, setEditStatus] = useState<"pending" | "confirmed" | "completed" | "cancelled">("pending");
   const [editNotes, setEditNotes] = useState("");
@@ -37,6 +38,15 @@ export default function AdminBookingManager() {
       } catch (error) {
         toast.error("Failed to delete booking");
       }
+    }
+  };
+
+  const handleSendReminder = async (id: number, customerEmail: string) => {
+    try {
+      await sendReminderMutation.mutateAsync({ bookingId: id });
+      toast.success(`Reminder sent to ${customerEmail}`);
+    } catch (error) {
+      toast.error("Failed to send reminder email");
     }
   };
 
@@ -128,6 +138,15 @@ export default function AdminBookingManager() {
                         </div>
                       </DialogContent>
                     </Dialog>
+
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleSendReminder(booking.id, booking.email)}
+                      title="Send reminder email"
+                    >
+                      <Bell className="w-4 h-4" />
+                    </Button>
 
                     <Button
                       size="sm"

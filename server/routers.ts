@@ -6,7 +6,7 @@ import { z } from "zod";
 import * as db from "./db";
 import { TRPCError } from "@trpc/server";
 import { sendBookingConfirmationEmail } from "./email";
-import { processDailyReminders } from "./reminder";
+import { processDailyReminders, sendReminderEmail } from "./reminder";
 
 export const appRouter = router({
   system: systemRouter,
@@ -93,6 +93,28 @@ export const appRouter = router({
         if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
         const result = await processDailyReminders();
         return result;
+      }),
+    
+    sendForBooking: protectedProcedure
+      .input(z.object({ bookingId: z.number() }))
+      .mutation(async ({ input, ctx }) => {
+        if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
+        
+        const booking = await db.getBookingById(input.bookingId);
+        if (!booking) throw new TRPCError({ code: "NOT_FOUND", message: "Booking not found" });
+        
+        const success = await sendReminderEmail({
+          customerName: booking.name,
+          customerEmail: booking.email,
+          serviceName: booking.service,
+          date: booking.date,
+          time: booking.time || "To be confirmed",
+          phone: booking.phone,
+        });
+        
+        if (!success) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Failed to send reminder email" });
+        
+        return { success: true, message: `Reminder sent to ${booking.email}` };
       }),
   }),
 
