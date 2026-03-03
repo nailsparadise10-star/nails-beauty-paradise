@@ -61,3 +61,19 @@ export const blogPosts = mysqlTable("blog_posts", {
 
 export type BlogPost = typeof blogPosts.$inferSelect;
 export type InsertBlogPost = typeof blogPosts.$inferInsert;
+// Email history table
+export const emailHistory = mysqlTable("email_history", {
+  id: int("id").autoincrement().primaryKey(),
+  bookingId: int("bookingId").notNull(),
+  customerEmail: varchar("customerEmail", { length: 320 }).notNull(),
+  customerName: varchar("customerName", { length: 255 }).notNull(),
+  subject: varchar("subject", { length: 255 }).notNull(),
+  emailType: mysqlEnum("emailType", ["confirmation", "reminder", "custom"]).notNull(),
+  customMessage: text("customMessage"),
+  status: mysqlEnum("status", ["sent", "failed", "pending"]).default("pending").notNull(),
+  sentAt: timestamp("sentAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type EmailHistory = typeof emailHistory.$inferSelect;
+export type InsertEmailHistory = typeof emailHistory.$inferInsert;

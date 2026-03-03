@@ -169,6 +169,12 @@ export const appRouter = router({
         return db.deleteBlogPost(input.id);
       }),
   }),
+
+  emailHistory: router({
+    getByBookingId: protectedProcedure
+      .input(z.object({ bookingId: z.number() }))
+      .query(({ input }) => db.getEmailHistoryByBookingId(input.bookingId)),
+  }),
 });
 
 export type AppRouter = typeof appRouter;

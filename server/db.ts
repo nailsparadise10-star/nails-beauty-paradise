@@ -1,6 +1,6 @@
 import { eq, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, bookings, blogPosts, Booking, InsertBooking, BlogPost, InsertBlogPost } from "../drizzle/schema";
+import { InsertUser, users, bookings, blogPosts, Booking, InsertBooking, BlogPost, InsertBlogPost, emailHistory, EmailHistory, InsertEmailHistory } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -160,4 +160,24 @@ export async function deleteBlogPost(id: number) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   return await db.delete(blogPosts).where(eq(blogPosts.id, id));
+}
+
+// Email history queries
+export async function getEmailHistoryByBookingId(bookingId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(emailHistory).where(eq(emailHistory.bookingId, bookingId)).orderBy(desc(emailHistory.createdAt));
+}
+
+export async function createEmailHistory(record: InsertEmailHistory) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.insert(emailHistory).values(record);
+  return result;
+}
+
+export async function updateEmailHistory(id: number, record: Partial<EmailHistory>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return await db.update(emailHistory).set(record).where(eq(emailHistory.id, id));
 }
