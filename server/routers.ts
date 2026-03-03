@@ -6,6 +6,7 @@ import { z } from "zod";
 import * as db from "./db";
 import { TRPCError } from "@trpc/server";
 import { sendBookingConfirmationEmail } from "./email";
+import { processDailyReminders } from "./reminder";
 
 export const appRouter = router({
   system: systemRouter,
@@ -82,6 +83,16 @@ export const appRouter = router({
       .mutation(({ input, ctx }) => {
         if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
         return db.deleteBooking(input.id);
+      }),
+  }),
+
+  // Reminder routes
+  reminders: router({
+    sendDaily: protectedProcedure
+      .mutation(async ({ ctx }) => {
+        if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
+        const result = await processDailyReminders();
+        return result;
       }),
   }),
 
