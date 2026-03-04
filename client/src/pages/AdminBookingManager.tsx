@@ -1,8 +1,8 @@
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc";
 import { Trash2, Edit2, CheckCircle, Clock, Bell } from "lucide-react";
-import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -85,8 +85,8 @@ export default function AdminBookingManager() {
             </thead>
             <tbody>
               {bookingsQuery.data?.map((booking) => (
-                <>
-                  <tr key={booking.id} className="border-b hover:bg-muted/50">
+                <React.Fragment key={booking.id}>
+                  <tr className="border-b hover:bg-muted/50">
                     <td className="py-3 px-4">{booking.name}</td>
                     <td className="py-3 px-4">{booking.service}</td>
                     <td className="py-3 px-4">{booking.date}</td>
@@ -180,7 +180,7 @@ export default function AdminBookingManager() {
                       </td>
                     </tr>
                   )}
-                </>
+                </React.Fragment>
               ))}
             </tbody>
           </table>
