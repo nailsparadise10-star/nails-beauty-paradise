@@ -2,11 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Calendar, Clock, User, Mail, Phone, MapPin, CheckCircle } from "lucide-react";
+import { Calendar, Clock, User, Mail, Phone, MapPin, CheckCircle, Users } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
+import GroupBookingForm from "@/components/GroupBookingForm";
 
 /**
  * NAILS & BEAUTY PARADISE - Booking Page
@@ -45,6 +46,7 @@ interface BookingFormData {
 }
 
 export default function Booking() {
+  const [bookingType, setBookingType] = useState<"individual" | "group">("individual");
   const [formData, setFormData] = useState<BookingFormData>({
     name: "",
     email: "",
@@ -223,6 +225,35 @@ export default function Booking() {
       {/* Booking Form Section */}
       <section className="py-16 bg-background">
         <div className="container max-w-4xl">
+          {/* Booking Type Tabs */}
+          <div className="flex gap-4 mb-8 border-b border-border">
+            <button
+              onClick={() => setBookingType("individual")}
+              className={`px-6 py-3 font-semibold transition-colors ${
+                bookingType === "individual"
+                  ? "text-primary border-b-2 border-primary"
+                  : "text-foreground/60 hover:text-foreground"
+              }`}
+            >
+              <User className="w-4 h-4 inline mr-2" />
+              Individual Booking
+            </button>
+            <button
+              onClick={() => setBookingType("group")}
+              className={`px-6 py-3 font-semibold transition-colors ${
+                bookingType === "group"
+                  ? "text-primary border-b-2 border-primary"
+                  : "text-foreground/60 hover:text-foreground"
+              }`}
+            >
+              <Users className="w-4 h-4 inline mr-2" />
+              Group Booking
+            </button>
+          </div>
+
+          {bookingType === "group" ? (
+            <GroupBookingForm />
+          ) : (
           <div className="grid md:grid-cols-3 gap-8">
             {/* Form */}
             <div className="md:col-span-2">
@@ -456,6 +487,7 @@ export default function Booking() {
               )}
             </div>
           </div>
+          )}
         </div>
       </section>
     </div>
