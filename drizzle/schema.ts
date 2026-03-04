@@ -25,7 +25,46 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// Bookings table
+// Group bookings table (main booking group)
+export const groupBookings = mysqlTable("group_bookings", {
+  id: int("id").autoincrement().primaryKey(),
+  groupName: varchar("groupName", { length: 255 }).notNull(),
+  date: varchar("date", { length: 50 }).notNull(),
+  time: varchar("time", { length: 20 }),
+  notes: text("notes"),
+  status: mysqlEnum("status", ["pending", "confirmed", "completed", "cancelled"]).default("pending").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type GroupBooking = typeof groupBookings.$inferSelect;
+export type InsertGroupBooking = typeof groupBookings.$inferInsert;
+
+// Booking members table (individual members in a group booking)
+export const bookingMembers = mysqlTable("booking_members", {
+  id: int("id").autoincrement().primaryKey(),
+  groupBookingId: int("groupBookingId").notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 320 }).notNull(),
+  phone: varchar("phone", { length: 20 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type BookingMember = typeof bookingMembers.$inferSelect;
+export type InsertBookingMember = typeof bookingMembers.$inferInsert;
+
+// Booking services table (services for each member)
+export const bookingServices = mysqlTable("booking_services", {
+  id: int("id").autoincrement().primaryKey(),
+  bookingMemberId: int("bookingMemberId").notNull(),
+  service: varchar("service", { length: 255 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type BookingService = typeof bookingServices.$inferSelect;
+export type InsertBookingService = typeof bookingServices.$inferInsert;
+
+// Legacy bookings table (for backward compatibility)
 export const bookings = mysqlTable("bookings", {
   id: int("id").autoincrement().primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),

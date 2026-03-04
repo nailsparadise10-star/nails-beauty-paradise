@@ -1,6 +1,6 @@
 import { eq, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, bookings, blogPosts, Booking, InsertBooking, BlogPost, InsertBlogPost, emailHistory, EmailHistory, InsertEmailHistory, scheduledEmails, ScheduledEmail, InsertScheduledEmail } from "../drizzle/schema";
+import { InsertUser, users, bookings, blogPosts, Booking, InsertBooking, BlogPost, InsertBlogPost, emailHistory, EmailHistory, InsertEmailHistory, scheduledEmails, ScheduledEmail, InsertScheduledEmail, groupBookings, GroupBooking, InsertGroupBooking, bookingMembers, BookingMember, InsertBookingMember, bookingServices, BookingService, InsertBookingService } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -213,4 +213,125 @@ export async function deleteScheduledEmail(id: number) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   return await db.delete(scheduledEmails).where(eq(scheduledEmails.id, id));
+}
+
+// Group Booking queries
+export async function getAllGroupBookings() {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(groupBookings).orderBy(desc(groupBookings.createdAt));
+}
+
+export async function getGroupBookingById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(groupBookings).where(eq(groupBookings.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function createGroupBooking(data: {
+  groupName: string;
+  date: string;
+  time?: string;
+  notes?: string;
+  members: Array<{
+    name: string;
+    email: string;
+    phone: string;
+    services: string[];
+  }>;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  try {
+    // Create group booking
+    const groupResult = await db.insert(groupBookings).values({
+      groupName: data.groupName,
+      date: data.date,
+      time: data.time,
+      notes: data.notes,
+      status: "pending",
+    });
+    
+    const groupBookingId = groupResult[0].insertId;
+    
+    // Create members and their services
+    for (const member of data.members) {
+      const memberResult = await db.insert(bookingMembers).values({
+        groupBookingId: groupBookingId,
+        name: member.name,
+        email: member.email,
+        phone: member.phone,
+      });
+      
+      const memberId = memberResult[0].insertId;
+      
+      // Create services for this member
+      for (const service of member.services) {
+        await db.insert(bookingServices).values({
+          bookingMemberId: memberId,
+          service: service,
+        });
+      }
+    }
+    
+    return { success: true, id: groupBookingId };
+  } catch (error) {
+    console.error("[Database] Failed to create group booking:", error);
+    throw error;
+  }
+}
+
+export async function updateGroupBooking(id: number, booking: Partial<GroupBooking>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return await db.update(groupBookings).set(booking).where(eq(groupBookings.id, id));
+}
+
+export async function deleteGroupBooking(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  try {
+    // Delete booking services
+    const members = await db.select().from(bookingMembers).where(eq(bookingMembers.groupBookingId, id));
+    for (const member of members) {
+      await db.delete(bookingServices).where(eq(bookingServices.bookingMemberId, member.id));
+    }
+    
+    // Delete booking members
+    await db.delete(bookingMembers).where(eq(bookingMembers.groupBookingId, id));
+    
+    // Delete group booking
+    return await db.delete(groupBookings).where(eq(groupBookings.id, id));
+  } catch (error) {
+    console.error("[Database] Failed to delete group booking:", error);
+    throw error;
+  }
+}
+
+export async function getGroupBookingWithMembers(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const booking = await getGroupBookingById(id);
+  if (!booking) return undefined;
+  
+  const members = await db.select().from(bookingMembers).where(eq(bookingMembers.groupBookingId, id));
+  
+  const membersWithServices = await Promise.all(
+    members.map(async (member) => {
+      const services = await db.select().from(bookingServices).where(eq(bookingServices.bookingMemberId, member.id));
+      return {
+        ...member,
+        services: services.map(s => s.service),
+      };
+    })
+  );
+  
+  return {
+    ...booking,
+    members: membersWithServices,
+  };
 }

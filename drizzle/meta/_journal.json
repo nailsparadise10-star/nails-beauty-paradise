@@ -29,6 +29,13 @@
       "when": 1772581169843,
       "tag": "0003_small_master_mold",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1772644281269,
+      "tag": "0004_faulty_the_hunter",
+      "breakpoints": true
     }
   ]
 }

@@ -21,6 +21,51 @@ export const appRouter = router({
     }),
   }),
 
+  // Group Booking routes (multiple customers, multiple services per booking)
+  groupBookings: router({
+    list: publicProcedure.query(() => db.getAllGroupBookings()),
+    
+    getById: publicProcedure
+      .input(z.object({ id: z.number() }))
+      .query(({ input }) => db.getGroupBookingById(input.id)),
+    
+    create: publicProcedure
+      .input(z.object({
+        groupName: z.string(),
+        date: z.string(),
+        time: z.string().optional(),
+        notes: z.string().optional(),
+        members: z.array(z.object({
+          name: z.string(),
+          email: z.string().email(),
+          phone: z.string(),
+          services: z.array(z.string()),
+        })),
+      }))
+      .mutation(async ({ input }) => {
+        const result = await db.createGroupBooking(input);
+        return result;
+      }),
+    
+    update: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        status: z.enum(["pending", "confirmed", "completed", "cancelled"]).optional(),
+        notes: z.string().optional(),
+      }))
+      .mutation(({ input, ctx }) => {
+        if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
+        return db.updateGroupBooking(input.id, { status: input.status, notes: input.notes });
+      }),
+    
+    delete: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(({ input, ctx }) => {
+        if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
+        return db.deleteGroupBooking(input.id);
+      }),
+  }),
+
   // Booking routes
   bookings: router({
     list: publicProcedure.query(() => db.getAllBookings()),

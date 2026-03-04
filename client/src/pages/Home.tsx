@@ -136,12 +136,6 @@ export default function Home() {
             >
               Services
             </button>
-            <button 
-              onClick={() => window.location.href = '/nail-designer'}
-              className="text-foreground hover:text-primary transition-colors cursor-pointer bg-none border-none p-0"
-            >
-              Designer
-            </button>
             <a href="#gallery" className="text-foreground hover:text-primary transition-colors">
               Gallery
             </a>
@@ -363,59 +357,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Nail Designer Section */}
-      <section className="py-20 bg-gradient-to-r from-primary/5 to-accent/5 border-b border-border">
-        <div className="container">
-          <h2 className="text-4xl font-bold text-center mb-4 elegant-text text-foreground">
-            Design Your Perfect Nails
-          </h2>
-          <div className="w-24 h-1 teal-gold-line mx-auto mb-12"></div>
-
-          <div className="grid md:grid-cols-2 gap-8 items-center mb-12">
-            <div>
-              <h3 className="text-2xl font-semibold mb-4 elegant-text text-foreground">
-                Interactive Nail Designer
-              </h3>
-              <p className="text-foreground/70 mb-6">
-                Use our innovative nail design tool to create your perfect nail art. Choose from a variety of colors, patterns, and effects to bring your vision to life.
-              </p>
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center gap-3 text-foreground">
-                  <span className="text-primary font-bold">✓</span>
-                  <span>15+ Base Colors to choose from</span>
-                </li>
-                <li className="flex items-center gap-3 text-foreground">
-                  <span className="text-primary font-bold">✓</span>
-                  <span>Multiple patterns (Solid, Gradient, Stripes, Dots, Marble)</span>
-                </li>
-                <li className="flex items-center gap-3 text-foreground">
-                  <span className="text-primary font-bold">✓</span>
-                  <span>Glitter and shine effects</span>
-                </li>
-                <li className="flex items-center gap-3 text-foreground">
-                  <span className="text-primary font-bold">✓</span>
-                  <span>Download and share your designs</span>
-                </li>
-              </ul>
-              <Button 
-                onClick={() => window.location.href = '/nail-designer'}
-                className="bg-primary hover:bg-primary/90 text-foreground font-semibold px-8 py-6"
-              >
-                Start Designing Now
-              </Button>
-            </div>
-            <div className="bg-white rounded-lg p-8 border border-border">
-              <div className="aspect-square bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg flex items-center justify-center">
-                <div className="text-center">
-                  <Sparkles className="w-16 h-16 text-primary mx-auto mb-4" />
-                  <p className="text-foreground/70 font-medium">Create Your Custom Design</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Blog Section */}
       <section id="blog" className="py-20 bg-background">
         <div className="container">
@@ -556,7 +497,7 @@ export default function Home() {
               {
                 icon: MapPin,
                 title: "Location",
-                info: "47 Vulture Street, West End, QLD 4101, Australia",
+                info: "49 Vulture Street, West End, QLD 4101, Australia",
               },
             ].map((contact, idx) => (
               <Card
