@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Sparkles, Heart, Users, Brush, Mail, Phone, MapPin, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { Link } from "wouter";
+import MobileMenu from "@/components/MobileMenu";
 
 /**
  * NAILS & BEAUTY PARADISE - Home Page
@@ -18,6 +19,7 @@ export default function Home() {
   // The userAuth hooks provides authentication state
   // To implement login/logout functionality, simply call logout() or redirect to getLoginUrl()
   let { user, loading, error, isAuthenticated, logout } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const [bookingForm, setBookingForm] = useState({
     name: "",
@@ -122,7 +124,7 @@ export default function Home() {
     <div className="min-h-screen bg-background">
       {/* Header/Navigation */}
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border">
-        <div className="container flex items-center justify-between py-4">
+        <div className="container flex items-center justify-between py-4 relative">
           <div className="flex items-center gap-2">
             <Sparkles className="w-8 h-8 text-primary" />
             <h1 className="text-2xl font-bold text-foreground elegant-text">
@@ -155,6 +157,7 @@ export default function Home() {
               Contact
             </a>
           </nav>
+          <MobileMenu isOpen={mobileMenuOpen} onToggle={() => setMobileMenuOpen(!mobileMenuOpen)} />
         </div>
       </header>
 
@@ -180,7 +183,8 @@ export default function Home() {
             <div className="flex gap-4">
               <Button
                 size="lg"
-                className="bg-primary hover:bg-primary/90 text-white rounded-lg transition-all hover:luxury-shadow"
+                onClick={() => window.location.href = '/booking'}
+                className="bg-primary hover:bg-primary/90 text-white rounded-lg transition-all hover:luxury-shadow cursor-pointer"
               >
                 Book Now
               </Button>
@@ -463,11 +467,12 @@ export default function Home() {
               </div>
 
               <Button
-                type="submit"
+                type="button"
                 size="lg"
-                className="w-full bg-primary hover:bg-primary/90 text-white rounded-lg transition-all"
+                onClick={() => window.location.href = '/booking'}
+                className="w-full bg-primary hover:bg-primary/90 text-white rounded-lg transition-all cursor-pointer"
               >
-                Confirm Booking
+                Go to Booking Page
               </Button>
             </form>
           </Card>
