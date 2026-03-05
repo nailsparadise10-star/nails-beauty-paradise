@@ -57,42 +57,42 @@ export default function Home() {
       name: "Manicure",
       description: "Professional nail care and polish application for hands",
       icon: "💅",
-      image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663388595337/XQ5oNXoz9gDgsidXKiHTe5/hero-nails-manicure-Deb2tvFehdgUPe2RhGhPKy.webp",
+      image: "https://sf-static.upanhlaylink.com/img/image_20260305ccb974907dc72688ad8b3151be3d49f9.jpg",
     },
     {
       id: 2,
       name: "Pedicure",
       description: "Luxurious foot care and nail polish treatment",
       icon: "🦶",
-      image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663388595337/XQ5oNXoz9gDgsidXKiHTe5/pedicure-service-aNsb8YLzdk4aGG6au6PNAm.webp",
+      image: "https://sf-static.upanhlaylink.com/img/image_20260305d10633e15a50da8e9174059c291435f4.jpg",
     },
     {
       id: 3,
       name: "Kids Services",
       description: "Fun and safe nail services designed for children",
       icon: "👧",
-      image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663388595337/XQ5oNXoz9gDgsidXKiHTe5/kids-nail-service-U3ewMkXhRyKfNgpJFoVyMh.webp",
+      image: "https://sf-static.upanhlaylink.com/img/image_2026030566ea9376b65fc00d2af658e33f92861f.jpg",
     },
     {
       id: 4,
       name: "Eyelash Extensions",
       description: "Beautiful and long-lasting eyelash enhancement",
       icon: "✨",
-      image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663388595337/XQ5oNXoz9gDgsidXKiHTe5/eyelash-extensions-3xPLDDJQAbEFTSjKaM2AsC.webp",
+      image: "https://sf-static.upanhlaylink.com/img/image_20260305f640e3269548721ea629156033f3947e.jpg",
     },
     {
       id: 5,
-      name: "Nail Art & Design",
+      name: "LASHES & BROWS",
       description: "Custom nail designs and artistic nail painting",
       icon: "🎨",
-      image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663388595337/XQ5oNXoz9gDgsidXKiHTe5/hero-nails-manicure-Deb2tvFehdgUPe2RhGhPKy.webp",
+      image: "https://sf-static.upanhlaylink.com/img/image_2026030579e1ab272fb14ca02305f956248b37c4.jpg",
     },
     {
       id: 6,
-      name: "Gel Polish",
+      name: "FEMALE WAX & TINT",
       description: "Long-lasting gel nail polish with professional finish",
       icon: "💎",
-      image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663388595337/XQ5oNXoz9gDgsidXKiHTe5/pedicure-service-aNsb8YLzdk4aGG6au6PNAm.webp",
+      image: "https://sf-static.upanhlaylink.com/img/image_20260305d559fc962c9ec05a8569b6b514787436.jpg",
     },
   ];
 
@@ -102,21 +102,21 @@ export default function Home() {
       title: "The Ultimate Guide to Nail Health: 10 Essential Tips",
       excerpt: "Learn how to keep your nails strong, healthy, and beautiful with these expert-approved tips from our professional nail technicians.",
       category: "Nail Care",
-      image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663388595337/XQ5oNXoz9gDgsidXKiHTe5/hero-nails-manicure-Deb2tvFehdgUPe2RhGhPKy.webp",
+      image: "https://sf-static.upanhlaylink.com/img/image_202603056fd69fce163e7a68b3a503e1565b367d.jpg",
     },
     {
       id: 2,
       title: "Spring 2026 Nail Trends: What's Hot This Season",
       excerpt: "Discover the hottest nail trends for spring 2026, from pastel ombre to minimalist designs. Get inspired and stay ahead of the curve!",
       category: "Trends",
-      image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663388595337/XQ5oNXoz9gDgsidXKiHTe5/hero-nails-manicure-Deb2tvFehdgUPe2RhGhPKy.webp",
+      image: "https://sf-static.upanhlaylink.com/img/image_20260305ed6368be3f1d632407b1a816c1aadfe3.jpg",
     },
     {
       id: 3,
       title: "Eyelash Extensions 101: Everything You Need to Know",
       excerpt: "Thinking about getting eyelash extensions? Learn everything about the process, aftercare, and how to maintain your beautiful lashes.",
       category: "Beauty Tips",
-      image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663388595337/XQ5oNXoz9gDgsidXKiHTe5/eyelash-extensions-3xPLDDJQAbEFTSjKaM2AsC.webp",
+      image: "https://sf-static.upanhlaylink.com/img/image_20260305f510f700538d6c7d5628f90e3eb75821.jpg",
     },
   ];
 
@@ -128,9 +128,12 @@ export default function Home() {
           <div className="flex items-center gap-2">
             <Sparkles className="w-8 h-8 text-primary" />
             <h1 className="text-2xl font-bold text-foreground elegant-text">
-              NAILS & BEAUTY PARADISE
+            
             </h1>
           </div>
+            <a href="https://share.google/VyI0pWyeU44Dc2fMI" className="text-foreground hover:text-primary transition-colors">
+              49 Vulture Street, West End, QLD 4101, Australia
+            </a>
           <nav className="hidden md:flex gap-8">
             <button 
               onClick={() => window.location.href = '/services'}
@@ -165,7 +168,7 @@ export default function Home() {
       <section className="relative h-[600px] overflow-hidden bg-gradient-to-b from-secondary to-background">
         <div className="absolute inset-0">
           <img
-            src="https://d2xsxph8kpxj0f.cloudfront.net/310519663388595337/XQ5oNXoz9gDgsidXKiHTe5/hero-nails-manicure-Deb2tvFehdgUPe2RhGhPKy.webp"
+            src="https://sf-static.upanhlaylink.com/img/image_20260305ed251b310505ab30eb1b2a0c73d62cc1.jpg"
             alt="Hero"
             className="w-full h-full object-cover opacity-40"
           />
@@ -358,123 +361,7 @@ export default function Home() {
       </section>
 
       {/* Blog Section */}
-      <section id="blog" className="py-20 bg-background">
-        <div className="container">
-          <h2 className="text-4xl font-bold text-center mb-4 elegant-text text-foreground">
-            Book Your Appointment
-          </h2>
-          <div className="w-24 h-1 teal-gold-line mx-auto mb-12"></div>
-
-          <Card className="p-8 bg-white border-border">
-            <form onSubmit={handleBookingSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Full Name
-                  </label>
-                  <Input
-                    type="text"
-                    name="name"
-                    value={bookingForm.name}
-                    onChange={handleBookingChange}
-                    placeholder="Your name"
-                    required
-                    className="border-border focus:border-primary focus:ring-primary"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Email
-                  </label>
-                  <Input
-                    type="email"
-                    name="email"
-                    value={bookingForm.email}
-                    onChange={handleBookingChange}
-                    placeholder="your@email.com"
-                    required
-                    className="border-border focus:border-primary focus:ring-primary"
-                  />
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Phone
-                  </label>
-                  <Input
-                    type="tel"
-                    name="phone"
-                    value={bookingForm.phone}
-                    onChange={handleBookingChange}
-                    placeholder="Your phone number"
-                    required
-                    className="border-border focus:border-primary focus:ring-primary"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Service
-                  </label>
-                  <select
-                    name="service"
-                    value={bookingForm.service}
-                    onChange={handleBookingChange}
-                    required
-                    className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary bg-white text-foreground"
-                  >
-                    <option value="">Select a service</option>
-                    {services.map((service) => (
-                      <option key={service.id} value={service.name}>
-                        {service.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  Preferred Date
-                </label>
-                <Input
-                  type="date"
-                  name="date"
-                  value={bookingForm.date}
-                  onChange={handleBookingChange}
-                  required
-                  className="border-border focus:border-primary focus:ring-primary"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  Additional Notes
-                </label>
-                <Textarea
-                  name="message"
-                  value={bookingForm.message}
-                  onChange={handleBookingChange}
-                  placeholder="Any special requests or preferences?"
-                  rows={4}
-                  className="border-border focus:border-primary focus:ring-primary"
-                />
-              </div>
-
-              <Button
-                type="button"
-                size="lg"
-                onClick={() => window.location.href = '/booking'}
-                className="w-full bg-primary hover:bg-primary/90 text-white rounded-lg transition-all cursor-pointer"
-              >
-                Go to Booking Page
-              </Button>
-            </form>
-          </Card>
-        </div>
-      </section>
-
+ 
       {/* Contact Section */}
       <section id="contact" className="py-20 bg-background">
         <div className="container">
@@ -546,8 +433,8 @@ export default function Home() {
             <div>
               <h4 className="font-semibold text-foreground mb-4 elegant-text">Services</h4>
               <ul className="space-y-2 text-sm text-foreground/70">
-                <li><a href="#services" className="hover:text-primary transition-colors">Manicure</a></li>
-                <li><a href="#services" className="hover:text-primary transition-colors">Pedicure</a></li>
+                <li><a href="#services" className="hover:text-primary transition-colors">Pedimain</a></li>
+                <li><a href="#services" className="hover:text-primary transition-colors">Nails Extensions</a></li>
                 <li><a href="#services" className="hover:text-primary transition-colors">Eyelash Extensions</a></li>
               </ul>
             </div>
