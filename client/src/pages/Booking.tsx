@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import GroupBookingForm from "@/components/GroupBookingForm";
+import AppointmentSummary, { AppointmentService } from "@/components/AppointmentSummary";
 
 /**
  * NAILS & BEAUTY PARADISE - Booking Page
@@ -25,6 +26,10 @@ const SERVICES = [
   { id: "eyelash", name: "Eyelash Extensions", duration: 120, price: 100 },
   { id: "kids-nails", name: "Kids Nail Service", duration: 30, price: 25 },
   { id: "nail-polish", name: "Nail Polish Change", duration: 20, price: 15 },
+  { id: "pedicure-manicure", name: "Pedicure & Manicure", duration: 90, price: 79 },
+  { id: "classic-manicure", name: "Classic Manicure", duration: 30, price: 40 },
+  { id: "eyebrows-wax", name: "Eyebrows Wax", duration: 15, price: 40 },
+  { id: "kid-pedicure", name: "Kid Pedicure", duration: 30, price: 40 },
 ];
 
 const STAFF = [
@@ -60,6 +65,7 @@ export default function Booking() {
 
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedServices, setSelectedServices] = useState<AppointmentService[]>([]);
   const createBookingMutation = trpc.bookings.create.useMutation();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -70,60 +76,83 @@ export default function Booking() {
     }));
   };
 
-  const validateForm = (): boolean => {
-    if (!formData.name.trim()) {
-      toast.error("Please enter your name");
-      return false;
-    }
-    if (!formData.email.trim() || !formData.email.includes("@")) {
-      toast.error("Please enter a valid email");
-      return false;
-    }
-    if (!formData.phone.trim()) {
-      toast.error("Please enter your phone number");
-      return false;
-    }
+  // Handle adding service to appointment
+  const handleAddService = () => {
     if (!formData.service) {
       toast.error("Please select a service");
-      return false;
+      return;
     }
-    if (!formData.date) {
-      toast.error("Please select a date");
-      return false;
-    }
-    if (!formData.time) {
-      toast.error("Please select a time");
-      return false;
-    }
-    if (!formData.staff) {
-      toast.error("Please select a staff member");
-      return false;
-    }
-    return true;
+
+    const service = SERVICES.find((s) => s.id === formData.service);
+    if (!service) return;
+
+    const newService: AppointmentService = {
+      id: `${formData.service}-${Date.now()}`,
+      name: service.name,
+      duration: service.duration,
+      price: service.price,
+      staff: formData.staff ? STAFF.find((s) => s.id === formData.staff)?.name : undefined,
+      location: "49 Vulture Street, West End, QLD 4101",
+    };
+
+    setSelectedServices([...selectedServices, newService]);
+    setFormData((prev) => ({
+      ...prev,
+      service: "",
+      staff: "",
+    }));
+    toast.success(`${service.name} added to appointment`);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Handle removing service
+  const handleRemoveService = (id: string) => {
+    setSelectedServices(selectedServices.filter((s) => s.id !== id));
+    toast.success("Service removed from appointment");
+  };
 
-    if (!validateForm()) return;
+  // Handle editing service
+  const handleEditService = (id: string) => {
+    const service = selectedServices.find((s) => s.id === id);
+    if (!service) return;
+
+    const originalService = SERVICES.find((s) => s.name === service.name);
+    if (originalService) {
+      setFormData((prev) => ({
+        ...prev,
+        service: originalService.id,
+        staff: STAFF.find((s) => s.name === service.staff)?.id || "",
+      }));
+      handleRemoveService(id);
+    }
+  };
+
+  // Handle schedule appointment
+  const handleScheduleAppointment = async () => {
+    if (selectedServices.length === 0) {
+      toast.error("Please add at least one service");
+      return;
+    }
+
+    if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim() || !formData.date || !formData.time) {
+      toast.error("Please fill in all required information");
+      return;
+    }
 
     setLoading(true);
     try {
-      // Call tRPC API to save booking to database
       await createBookingMutation.mutateAsync({
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
-        service: formData.service,
+        service: selectedServices.map((s) => s.name).join(", "),
         date: formData.date,
         time: formData.time,
         notes: formData.notes,
       });
 
       setSubmitted(true);
-      toast.success("Booking confirmed! We'll send you a confirmation email shortly.");
+      toast.success("Appointment scheduled! Confirmation email sent.");
 
-      // Reset form after 3 seconds
       setTimeout(() => {
         setFormData({
           name: "",
@@ -135,11 +164,12 @@ export default function Booking() {
           staff: "",
           notes: "",
         });
+        setSelectedServices([]);
         setSubmitted(false);
       }, 3000);
     } catch (error) {
       console.error("Booking error:", error);
-      toast.error("Failed to submit booking. Please try again.");
+      toast.error("Failed to schedule appointment. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -195,12 +225,6 @@ export default function Booking() {
               Services
             </button>
             <button
-              onClick={() => (window.location.href = "/nail-designer")}
-              className="text-foreground hover:text-primary transition-colors cursor-pointer bg-none border-none p-0"
-            >
-              Designer
-            </button>
-            <button
               onClick={() => (window.location.href = "/blog")}
               className="text-foreground hover:text-primary transition-colors cursor-pointer bg-none border-none p-0"
             >
@@ -224,7 +248,7 @@ export default function Booking() {
 
       {/* Booking Form Section */}
       <section className="py-16 bg-background">
-        <div className="container max-w-4xl">
+        <div className="container max-w-6xl">
           {/* Booking Type Tabs */}
           <div className="flex gap-4 mb-8 border-b border-border">
             <button
@@ -254,102 +278,132 @@ export default function Booking() {
           {bookingType === "group" ? (
             <GroupBookingForm />
           ) : (
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Form */}
-            <div className="md:col-span-2">
-              {submitted ? (
-                <Card className="p-8 bg-white border-border text-center">
-                  <div className="flex justify-center mb-4">
-                    <CheckCircle className="w-16 h-16 text-primary" />
-                  </div>
-                  <h2 className="text-2xl font-bold text-foreground mb-2 elegant-text">Booking Confirmed!</h2>
-                  <p className="text-foreground/70 mb-4">
-                    Thank you for booking with us. A confirmation email has been sent to {formData.email}
-                  </p>
-                  <div className="bg-primary/5 rounded-lg p-4 mb-6 text-left">
-                    <p className="text-sm text-foreground/70 mb-2">
-                      <strong>Service:</strong> {selectedService?.name}
+            <div className="grid md:grid-cols-3 gap-8">
+              {/* Form */}
+              <div className="md:col-span-2">
+                {submitted ? (
+                  <Card className="p-8 bg-white border-border text-center">
+                    <div className="flex justify-center mb-4">
+                      <CheckCircle className="w-16 h-16 text-primary" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-foreground mb-2 elegant-text">Booking Confirmed!</h2>
+                    <p className="text-foreground/70 mb-4">
+                      Thank you for booking with us. A confirmation email has been sent to {formData.email}
                     </p>
-                    <p className="text-sm text-foreground/70 mb-2">
-                      <strong>Date:</strong> {new Date(formData.date).toLocaleDateString()}
-                    </p>
-                    <p className="text-sm text-foreground/70">
-                      <strong>Time:</strong> {formData.time}
-                    </p>
-                  </div>
-                  <Button
-                    onClick={() => (window.location.href = "/")}
-                    className="bg-primary hover:bg-primary/90 text-foreground font-semibold w-full"
-                  >
-                    Back to Home
-                  </Button>
-                </Card>
-              ) : (
-                <Card className="p-8 bg-white border-border">
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Personal Information */}
-                    <div>
-                      <h3 className="text-lg font-semibold text-foreground mb-4 elegant-text">Your Information</h3>
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium text-foreground mb-2">Full Name *</label>
-                          <Input
-                            type="text"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleInputChange}
-                            placeholder="Enter your full name"
-                            className="border-border"
-                          />
-                        </div>
-                        <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-primary/5 rounded-lg p-4 mb-6 text-left">
+                      <p className="text-sm text-foreground/70 mb-2">
+                        <strong>Services:</strong> {selectedServices.map((s) => s.name).join(", ")}
+                      </p>
+                      <p className="text-sm text-foreground/70 mb-2">
+                        <strong>Date:</strong> {new Date(formData.date).toLocaleDateString()}
+                      </p>
+                      <p className="text-sm text-foreground/70">
+                        <strong>Time:</strong> {formData.time}
+                      </p>
+                    </div>
+                    <Button
+                      onClick={() => (window.location.href = "/")}
+                      className="bg-primary hover:bg-primary/90 text-foreground font-semibold w-full"
+                    >
+                      Back to Home
+                    </Button>
+                  </Card>
+                ) : (
+                  <Card className="p-8 bg-white border-border">
+                    <form className="space-y-6">
+                      {/* Personal Information */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-4 elegant-text">Your Information</h3>
+                        <div className="space-y-4">
                           <div>
-                            <label className="block text-sm font-medium text-foreground mb-2">Email *</label>
+                            <label className="block text-sm font-medium text-foreground mb-2">Full Name *</label>
                             <Input
-                              type="email"
-                              name="email"
-                              value={formData.email}
+                              type="text"
+                              name="name"
+                              value={formData.name}
                               onChange={handleInputChange}
-                              placeholder="your@email.com"
+                              placeholder="Enter your full name"
                               className="border-border"
                             />
                           </div>
-                          <div>
-                            <label className="block text-sm font-medium text-foreground mb-2">Phone *</label>
-                            <Input
-                              type="tel"
-                              name="phone"
-                              value={formData.phone}
-                              onChange={handleInputChange}
-                              placeholder="+61 434 188 999"
-                              className="border-border"
-                            />
+                          <div className="grid md:grid-cols-2 gap-4">
+                            <div>
+                              <label className="block text-sm font-medium text-foreground mb-2">Email *</label>
+                              <Input
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleInputChange}
+                                placeholder="your@email.com"
+                                className="border-border"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium text-foreground mb-2">Phone *</label>
+                              <Input
+                                type="tel"
+                                name="phone"
+                                value={formData.phone}
+                                onChange={handleInputChange}
+                                placeholder="+61 434 188 999"
+                                className="border-border"
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Service Selection */}
-                    <div>
-                      <h3 className="text-lg font-semibold text-foreground mb-4 elegant-text">Service Details</h3>
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium text-foreground mb-2">Select Service *</label>
-                          <select
-                            name="service"
-                            value={formData.service}
-                            onChange={handleInputChange}
-                            className="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                      {/* Service Selection */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-4 elegant-text">Add Services</h3>
+                        <div className="space-y-4">
+                          <div>
+                            <label className="block text-sm font-medium text-foreground mb-2">Select Service</label>
+                            <select
+                              name="service"
+                              value={formData.service}
+                              onChange={handleInputChange}
+                              className="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                            >
+                              <option value="">Choose a service...</option>
+                              {SERVICES.map((service) => (
+                                <option key={service.id} value={service.id}>
+                                  {service.name} - ${service.price} ({service.duration} min)
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div>
+                            <label className="block text-sm font-medium text-foreground mb-2">Staff Member (Optional)</label>
+                            <select
+                              name="staff"
+                              value={formData.staff}
+                              onChange={handleInputChange}
+                              className="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                            >
+                              <option value="">Any staff member</option>
+                              {STAFF.map((member) => (
+                                <option key={member.id} value={member.id}>
+                                  {member.name}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <Button
+                            type="button"
+                            onClick={handleAddService}
+                            className="w-full bg-primary hover:bg-primary/90 text-white rounded-lg font-semibold"
                           >
-                            <option value="">Choose a service...</option>
-                            {SERVICES.map((service) => (
-                              <option key={service.id} value={service.id}>
-                                {service.name} - ${service.price} ({service.duration} min)
-                              </option>
-                            ))}
-                          </select>
+                            Add Service
+                          </Button>
                         </div>
+                      </div>
 
+                      {/* Date & Time */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-4 elegant-text">Appointment Date & Time</h3>
                         <div className="grid md:grid-cols-2 gap-4">
                           <div>
                             <label className="block text-sm font-medium text-foreground mb-2">Date *</label>
@@ -370,7 +424,7 @@ export default function Booking() {
                               onChange={handleInputChange}
                               className="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                             >
-                              <option value="">Select time...</option>
+                              <option value="">Select a time...</option>
                               {availableTimes.map((time) => (
                                 <option key={time} value={time}>
                                   {time}
@@ -380,113 +434,73 @@ export default function Booking() {
                           </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Staff Selection */}
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Preferred Staff Member *</label>
-                      <select
-                        name="staff"
-                        value={formData.staff}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                      >
-                        <option value="">Choose a staff member...</option>
-                        {STAFF.map((staff) => (
-                          <option key={staff.id} value={staff.id}>
-                            {staff.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                      {/* Notes */}
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-2">Special Requests (Optional)</label>
+                        <Textarea
+                          name="notes"
+                          value={formData.notes}
+                          onChange={handleInputChange}
+                          placeholder="Any special requests or preferences..."
+                          className="border-border"
+                          rows={4}
+                        />
+                      </div>
+                    </form>
+                  </Card>
+                )}
+              </div>
 
-                    {/* Notes */}
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Special Requests (Optional)</label>
-                      <Textarea
-                        name="notes"
-                        value={formData.notes}
-                        onChange={handleInputChange}
-                        placeholder="Any special requests or preferences..."
-                        className="border-border"
-                        rows={4}
-                      />
-                    </div>
+              {/* Sidebar - Appointment Summary */}
+              <div className="space-y-6">
+                <AppointmentSummary
+                  services={selectedServices}
+                  onAddService={handleAddService}
+                  onEditService={handleEditService}
+                  onRemoveService={handleRemoveService}
+                  onSchedule={handleScheduleAppointment}
+                  isLoading={loading}
+                />
 
-                    {/* Submit Button */}
-                    <Button
-                      type="submit"
-                      disabled={loading}
-                      className="w-full bg-primary hover:bg-primary/90 text-foreground font-semibold py-3"
-                    >
-                      {loading ? "Processing..." : "Confirm Booking"}
-                    </Button>
-                  </form>
-                </Card>
-              )}
-            </div>
-
-            {/* Sidebar */}
-            <div className="space-y-6">
-              {/* Contact Info */}
-              <Card className="p-6 bg-white border-border">
-                <h3 className="text-lg font-semibold text-foreground mb-4 elegant-text">Contact Us</h3>
-                <div className="space-y-4 text-sm text-foreground/70">
-                  <div className="flex items-start gap-3">
-                    <Phone className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-medium text-foreground">Phone</p>
-                      <p>+61 434 188 999</p>
+                {/* Contact Info */}
+                <Card className="p-6 bg-white border-border">
+                  <h3 className="text-lg font-semibold text-foreground mb-4 elegant-text">Contact Us</h3>
+                  <div className="space-y-4 text-sm text-foreground/70">
+                    <div className="flex items-start gap-3">
+                      <Phone className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-medium text-foreground">Phone</p>
+                        <p>+61 434 188 999</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <Mail className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-medium text-foreground">Email</p>
-                      <p>suport@nailsparadise.com</p>
+                    <div className="flex items-start gap-3">
+                      <Mail className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-medium text-foreground">Email</p>
+                        <p>suport@nailsparadise.com</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-medium text-foreground">Location</p>
-                      <p>49 Vulture Street, West End, QLD 4101, Australia</p>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-
-              {/* Hours */}
-              <Card className="p-6 bg-white border-border">
-                <h3 className="text-lg font-semibold text-foreground mb-4 elegant-text">Hours</h3>
-                <ul className="space-y-2 text-sm text-foreground/70">
-                  <li>Sun: 10:00am - 4:00pm</li>
-                  <li>Mon-Sat: 8:30am - 9:30pm</li>
-                </ul>
-              </Card>
-
-              {/* Service Info */}
-              {selectedService && (
-                <Card className="p-6 bg-primary/5 border border-primary/20">
-                  <h3 className="text-lg font-semibold text-foreground mb-4 elegant-text">Service Summary</h3>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-foreground/70">Service:</span>
-                      <span className="font-medium text-foreground">{selectedService.name}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-foreground/70">Duration:</span>
-                      <span className="font-medium text-foreground">{selectedService.duration} minutes</span>
-                    </div>
-                    <div className="flex justify-between pt-2 border-t border-primary/20">
-                      <span className="text-foreground/70">Price:</span>
-                      <span className="font-bold text-primary">${selectedService.price}</span>
+                    <div className="flex items-start gap-3">
+                      <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-medium text-foreground">Location</p>
+                        <p>49 Vulture Street, West End, QLD 4101, Australia</p>
+                      </div>
                     </div>
                   </div>
                 </Card>
-              )}
+
+                {/* Hours */}
+                <Card className="p-6 bg-white border-border">
+                  <h3 className="text-lg font-semibold text-foreground mb-4 elegant-text">Hours</h3>
+                  <ul className="space-y-2 text-sm text-foreground/70">
+                    <li>Sun: 10:00am - 4:00pm</li>
+                    <li>Mon-Sat: 8:30am - 9:30pm</li>
+                  </ul>
+                </Card>
+              </div>
             </div>
-          </div>
           )}
         </div>
       </section>
