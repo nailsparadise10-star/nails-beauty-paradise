@@ -135,3 +135,84 @@ export const scheduledEmails = mysqlTable("scheduled_emails", {
 
 export type ScheduledEmail = typeof scheduledEmails.$inferSelect;
 export type InsertScheduledEmail = typeof scheduledEmails.$inferInsert;
+
+// Services table
+export const services = mysqlTable("services", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  description: text("description"),
+  price: varchar("price", { length: 20 }).notNull(),
+  duration: int("duration").notNull(), // in minutes
+  category: varchar("category", { length: 100 }),
+  imageUrl: text("imageUrl"),
+  isActive: int("isActive").default(1),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Service = typeof services.$inferSelect;
+export type InsertService = typeof services.$inferInsert;
+
+// Staff table
+export const staff = mysqlTable("staff", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 320 }),
+  phone: varchar("phone", { length: 20 }),
+  specialties: text("specialties"), // JSON array of service IDs
+  bio: text("bio"),
+  imageUrl: text("imageUrl"),
+  isActive: int("isActive").default(1),
+  workStartTime: varchar("workStartTime", { length: 10 }), // HH:MM format
+  workEndTime: varchar("workEndTime", { length: 10 }), // HH:MM format
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Staff = typeof staff.$inferSelect;
+export type InsertStaff = typeof staff.$inferInsert;
+
+// Staff availability table (for scheduling)
+export const staffAvailability = mysqlTable("staff_availability", {
+  id: int("id").autoincrement().primaryKey(),
+  staffId: int("staffId").notNull(),
+  date: varchar("date", { length: 50 }).notNull(),
+  startTime: varchar("startTime", { length: 10 }).notNull(),
+  endTime: varchar("endTime", { length: 10 }).notNull(),
+  isAvailable: int("isAvailable").default(1),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type StaffAvailability = typeof staffAvailability.$inferSelect;
+export type InsertStaffAvailability = typeof staffAvailability.$inferInsert;
+
+// Customers table
+export const customers = mysqlTable("customers", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 320 }).notNull().unique(),
+  phone: varchar("phone", { length: 20 }).notNull(),
+  address: text("address"),
+  notes: text("notes"),
+  totalBookings: int("totalBookings").default(0),
+  totalSpent: varchar("totalSpent", { length: 20 }).default("0"),
+  lastBookingDate: timestamp("lastBookingDate"),
+  isActive: int("isActive").default(1),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Customer = typeof customers.$inferSelect;
+export type InsertCustomer = typeof customers.$inferInsert;
+
+// Appointment staff assignment (who's doing what service)
+export const appointmentStaff = mysqlTable("appointment_staff", {
+  id: int("id").autoincrement().primaryKey(),
+  bookingId: int("bookingId").notNull(),
+  serviceId: int("serviceId").notNull(),
+  staffId: int("staffId").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type AppointmentStaff = typeof appointmentStaff.$inferSelect;
+export type InsertAppointmentStaff = typeof appointmentStaff.$inferInsert;

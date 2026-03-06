@@ -1,6 +1,6 @@
 import { eq, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, bookings, blogPosts, Booking, InsertBooking, BlogPost, InsertBlogPost, emailHistory, EmailHistory, InsertEmailHistory, scheduledEmails, ScheduledEmail, InsertScheduledEmail, groupBookings, GroupBooking, InsertGroupBooking, bookingMembers, BookingMember, InsertBookingMember, bookingServices, BookingService, InsertBookingService } from "../drizzle/schema";
+import { InsertUser, users, bookings, blogPosts, Booking, InsertBooking, BlogPost, InsertBlogPost, emailHistory, EmailHistory, InsertEmailHistory, scheduledEmails, ScheduledEmail, InsertScheduledEmail, groupBookings, GroupBooking, InsertGroupBooking, bookingMembers, BookingMember, InsertBookingMember, bookingServices, BookingService, InsertBookingService, services, Service, InsertService, staff, Staff, InsertStaff, customers, Customer, InsertCustomer } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -334,4 +334,110 @@ export async function getGroupBookingWithMembers(id: number) {
     ...booking,
     members: membersWithServices,
   };
+}
+
+
+// ============= SERVICES MANAGEMENT =============
+export async function getAllServices(): Promise<Service[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(services);
+}
+
+export async function getServiceById(id: number): Promise<Service | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(services).where(eq(services.id, id));
+  return result[0];
+}
+
+export async function createService(data: InsertService): Promise<Service> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.insert(services).values(data);
+  return getServiceById(result[0].insertId as number) as Promise<Service>;
+}
+
+export async function updateService(id: number, data: Partial<InsertService>): Promise<Service> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(services).set(data).where(eq(services.id, id));
+  return getServiceById(id) as Promise<Service>;
+}
+
+export async function deleteService(id: number): Promise<boolean> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.delete(services).where(eq(services.id, id));
+  return true;
+}
+
+// ============= STAFF MANAGEMENT =============
+export async function getAllStaff(): Promise<Staff[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(staff);
+}
+
+export async function getStaffById(id: number): Promise<Staff | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(staff).where(eq(staff.id, id));
+  return result[0];
+}
+
+export async function createStaff(data: InsertStaff): Promise<Staff> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.insert(staff).values(data);
+  return getStaffById(result[0].insertId as number) as Promise<Staff>;
+}
+
+export async function updateStaff(id: number, data: Partial<InsertStaff>): Promise<Staff> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(staff).set(data).where(eq(staff.id, id));
+  return getStaffById(id) as Promise<Staff>;
+}
+
+export async function deleteStaff(id: number): Promise<boolean> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.delete(staff).where(eq(staff.id, id));
+  return true;
+}
+
+// ============= CUSTOMERS MANAGEMENT =============
+export async function getAllCustomers(): Promise<Customer[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(customers);
+}
+
+export async function getCustomerById(id: number): Promise<Customer | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(customers).where(eq(customers.id, id));
+  return result[0];
+}
+
+export async function createCustomer(data: InsertCustomer): Promise<Customer> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.insert(customers).values(data);
+  return getCustomerById(result[0].insertId as number) as Promise<Customer>;
+}
+
+export async function updateCustomer(id: number, data: Partial<InsertCustomer>): Promise<Customer> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(customers).set(data).where(eq(customers.id, id));
+  return getCustomerById(id) as Promise<Customer>;
+}
+
+export async function deleteCustomer(id: number): Promise<boolean> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.delete(customers).where(eq(customers.id, id));
+  return true;
 }

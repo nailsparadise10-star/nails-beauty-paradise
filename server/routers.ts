@@ -261,6 +261,146 @@ export const appRouter = router({
         return { success: true, message: "Email scheduling cancelled" };
       }),
   }),
+
+  // Services management
+  services: router({
+    list: publicProcedure.query(() => db.getAllServices()),
+    
+    getById: publicProcedure
+      .input(z.object({ id: z.number() }))
+      .query(({ input }) => db.getServiceById(input.id)),
+    
+    create: protectedProcedure
+      .input(z.object({
+        name: z.string().min(1),
+        description: z.string().optional(),
+        price: z.string(),
+        duration: z.number().min(1),
+        category: z.string().optional(),
+        imageUrl: z.string().optional(),
+      }))
+      .mutation(({ input, ctx }) => {
+        if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
+        return db.createService(input);
+      }),
+    
+    update: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        name: z.string().optional(),
+        description: z.string().optional(),
+        price: z.string().optional(),
+        duration: z.number().optional(),
+        category: z.string().optional(),
+        imageUrl: z.string().optional(),
+        isActive: z.number().optional(),
+      }))
+      .mutation(({ input, ctx }) => {
+        if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
+        return db.updateService(input.id, input);
+      }),
+    
+    delete: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(({ input, ctx }) => {
+        if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
+        return db.deleteService(input.id);
+      }),
+  }),
+
+  // Staff management
+  staff: router({
+    list: publicProcedure.query(() => db.getAllStaff()),
+    
+    getById: publicProcedure
+      .input(z.object({ id: z.number() }))
+      .query(({ input }) => db.getStaffById(input.id)),
+    
+    create: protectedProcedure
+      .input(z.object({
+        name: z.string().min(1),
+        email: z.string().email().optional(),
+        phone: z.string().optional(),
+        specialties: z.string().optional(),
+        bio: z.string().optional(),
+        imageUrl: z.string().optional(),
+        workStartTime: z.string().optional(),
+        workEndTime: z.string().optional(),
+      }))
+      .mutation(({ input, ctx }) => {
+        if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
+        return db.createStaff(input);
+      }),
+    
+    update: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        name: z.string().optional(),
+        email: z.string().optional(),
+        phone: z.string().optional(),
+        specialties: z.string().optional(),
+        bio: z.string().optional(),
+        imageUrl: z.string().optional(),
+        isActive: z.number().optional(),
+        workStartTime: z.string().optional(),
+        workEndTime: z.string().optional(),
+      }))
+      .mutation(({ input, ctx }) => {
+        if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
+        return db.updateStaff(input.id, input);
+      }),
+    
+    delete: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(({ input, ctx }) => {
+        if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
+        return db.deleteStaff(input.id);
+      }),
+  }),
+
+  // Customers management
+  customers: router({
+    list: publicProcedure.query(() => db.getAllCustomers()),
+    
+    getById: publicProcedure
+      .input(z.object({ id: z.number() }))
+      .query(({ input }) => db.getCustomerById(input.id)),
+    
+    create: protectedProcedure
+      .input(z.object({
+        name: z.string().min(1),
+        email: z.string().email(),
+        phone: z.string(),
+        address: z.string().optional(),
+        notes: z.string().optional(),
+      }))
+      .mutation(({ input, ctx }) => {
+        if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
+        return db.createCustomer(input);
+      }),
+    
+    update: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+        name: z.string().optional(),
+        email: z.string().optional(),
+        phone: z.string().optional(),
+        address: z.string().optional(),
+        notes: z.string().optional(),
+        isActive: z.number().optional(),
+      }))
+      .mutation(({ input, ctx }) => {
+        if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
+        return db.updateCustomer(input.id, input);
+      }),
+    
+    delete: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(({ input, ctx }) => {
+        if (ctx.user.role !== "admin") throw new TRPCError({ code: "FORBIDDEN" });
+        return db.deleteCustomer(input.id);
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;

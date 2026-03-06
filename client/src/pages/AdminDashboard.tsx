@@ -3,9 +3,12 @@ import DashboardLayout from "@/components/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { trpc } from "@/lib/trpc";
-import { Calendar, FileText, AlertCircle } from "lucide-react";
+import { Calendar, FileText, AlertCircle, Package, UserCheck, Users, BarChart3 } from "lucide-react";
 import AdminBookingManager from "./AdminBookingManager";
 import AdminBlogManager from "./AdminBlogManager";
+import ServiceManager from "@/components/ServiceManager";
+import StaffManager from "@/components/StaffManager";
+import CustomerManager from "@/components/CustomerManager";
 
 export default function AdminDashboard() {
   const { user, isAuthenticated } = useAuth();
@@ -67,13 +70,43 @@ export default function AdminDashboard() {
 
         {/* Management Tabs */}
         <Tabs defaultValue="bookings" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="bookings">Bookings</TabsTrigger>
-            <TabsTrigger value="blog">Blog Posts</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="bookings" className="flex items-center gap-2">
+              <Calendar className="w-4 h-4" />
+              <span className="hidden sm:inline">Bookings</span>
+            </TabsTrigger>
+            <TabsTrigger value="services" className="flex items-center gap-2">
+              <Package className="w-4 h-4" />
+              <span className="hidden sm:inline">Services</span>
+            </TabsTrigger>
+            <TabsTrigger value="staff" className="flex items-center gap-2">
+              <UserCheck className="w-4 h-4" />
+              <span className="hidden sm:inline">Staff</span>
+            </TabsTrigger>
+            <TabsTrigger value="customers" className="flex items-center gap-2">
+              <Users className="w-4 h-4" />
+              <span className="hidden sm:inline">Customers</span>
+            </TabsTrigger>
+            <TabsTrigger value="blog" className="flex items-center gap-2">
+              <FileText className="w-4 h-4" />
+              <span className="hidden sm:inline">Blog</span>
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="bookings" className="space-y-4">
             <AdminBookingManager />
+          </TabsContent>
+
+          <TabsContent value="services" className="space-y-4">
+            <ServiceManager />
+          </TabsContent>
+
+          <TabsContent value="staff" className="space-y-4">
+            <StaffManager />
+          </TabsContent>
+
+          <TabsContent value="customers" className="space-y-4">
+            <CustomerManager />
           </TabsContent>
 
           <TabsContent value="blog" className="space-y-4">
