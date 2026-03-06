@@ -363,19 +363,15 @@ export default function BlogPost() {
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border">
         <div className="container flex items-center justify-between py-4">
-          <Link href="/">
-            <a className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-              <span className="text-2xl">✨</span>
-              <h1 className="text-2xl font-bold text-foreground elegant-text">
-                NAILS & BEAUTY PARADISE
-              </h1>
-            </a>
-          </Link>
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <span className="text-2xl">✨</span>
+          <h1 className="text-2xl font-bold text-foreground elegant-text">
+            NAILS & BEAUTY PARADISE
+          </h1>
+        </Link>
           <nav className="hidden md:flex gap-8">
-            <Link href="/">
-              <a className="text-foreground hover:text-primary transition-colors">
-                Home
-              </a>
+            <Link href="/" className="text-foreground hover:text-primary transition-colors">
+              Home
             </Link>
             <a href="/#services" className="text-foreground hover:text-primary transition-colors">
               Services
@@ -383,10 +379,8 @@ export default function BlogPost() {
             <a href="/#booking" className="text-foreground hover:text-primary transition-colors">
               Booking
             </a>
-            <Link href="/blog">
-              <a className="text-foreground hover:text-primary transition-colors">
-                Blog
-              </a>
+            <Link href="/blog" className="text-foreground hover:text-primary transition-colors">
+              Blog
             </Link>
           </nav>
         </div>
@@ -395,11 +389,9 @@ export default function BlogPost() {
       {/* Back Button */}
       <div className="bg-secondary/50 border-b border-border">
         <div className="container py-4">
-          <Link href="/blog">
-            <a className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors">
-              <ArrowLeft className="w-4 h-4" />
-              Back to Blog
-            </a>
+          <Link href="/blog" className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors">
+            <ArrowLeft className="w-4 h-4" />
+            Back to Blog
           </Link>
         </div>
       </div>
