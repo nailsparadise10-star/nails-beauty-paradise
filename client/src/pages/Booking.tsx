@@ -206,11 +206,12 @@ export default function Booking() {
             onClick={() => (window.location.href = "/")}
             className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer bg-none border-none p-0"
           >
-            <span className="text-2xl">✨</span>
+            <span className="text-2xl"></span>
             <h1 className="text-2xl font-bold text-foreground elegant-text">
-              NAILS & BEAUTY PARADISE
+             
             </h1>
           </button>
+<a href="https://share.google/Dqa79IOkH8TL4Tk2s" className="text-foreground hover:text-primary transition-colors">49 Vulture Street, West End, QLD 4101, Australia</a>
           <nav className="hidden md:flex gap-8">
             <button
               onClick={() => (window.location.href = "/")}
@@ -229,6 +230,12 @@ export default function Booking() {
               className="text-foreground hover:text-primary transition-colors cursor-pointer bg-none border-none p-0"
             >
               Blog
+            </button>
+             <button
+              onClick={() => (window.location.href = "/GiftCard")}
+              className="text-foreground hover:text-primary transition-colors cursor-pointer bg-none border-none p-0"
+            >
+              Gift Card
             </button>
             <span className="text-primary font-semibold">Booking</span>
           </nav>
